@@ -1,0 +1,29 @@
+{
+  "name": "ho-chi-minh-reading-culture",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ddnn1510/ho-chi-minh-reading-culture.git",
+  "author": "ddnn1510 <nndd.1510@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "setup-project": "npm i && cd client && npm i",
+    "dev": "nodemon server.js",
+    "watch": "node --watch server.js "
+  },
+  "dependencies": {
+    "bcryptjs": "2.4.3",
+    "concurrently": "8.0.1",
+    "dayjs": "1.11.7",
+    "dotenv": "16.0.3",
+    "express": "4.18.2",
+    "express-async-errors": "3.1.1",
+    "express-rate-limit": "^7.2.0",
+    "express-validator": "7.0.1",
+    "http-status-codes": "2.2.0",
+    "jsonwebtoken": "9.0.0",
+    "mongoose": "7.0.5",
+    "morgan": "1.10.0",
+    "nodemon": "2.0.22"
+  }
+}
