@@ -1,3 +1,4 @@
+import 'express-async-errors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
@@ -28,6 +29,7 @@ app.use('*', (req, res) => {
 app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5100;
+
 try {
   await mongoose.connect(process.env.MONGO_URL);
   app.listen(port, () => {

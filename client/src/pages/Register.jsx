@@ -1,13 +1,30 @@
-import { Link } from 'react-router-dom';
+import { Form, Link, redirect } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage';
 import { FormRow } from '../components';
+import customFetch from '../utils/customFetch';
 import portraictImg from '../assets/images/portrait-bac-ho.png';
+import { toast } from 'react-toastify';
+
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+
+  try {
+    await customFetch.post('/auth/register', data);
+    toast.success('Registration successful');
+    return redirect('/login');
+  } catch (error) {
+    toast.error(error?.response?.data?.msg);
+
+    return error;
+  }
+};
 
 const Register = () => {
   return (
     <Wrapper>
       <div className="form-container">
-        <form className="form">
+        <Form className="form" method="post">
           <h4>Đăng ký tài khoản</h4>
           <p>
             Đã có tài khoản?
@@ -21,7 +38,7 @@ const Register = () => {
           <button type="submit" className="btn btn-block">
             Đăng ký
           </button>
-        </form>
+        </Form>
       </div>
       <div className="img-container">
         <img src={portraictImg} alt="Anh Bac Ho" />
