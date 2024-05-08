@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { action as registerAction } from './pages/Register';
 import { action as loginAction } from './pages/Login';
+import { AdminAddPost, AdminLayout, AdminAllPosts } from './pages/admin';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,20 @@ const router = createBrowserRouter([
         path: 'login',
         element: <Login />,
         action: loginAction(queryClient),
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    children: [
+      {
+        index: true,
+        element: <AdminAddPost />,
+      },
+      {
+        path: 'posts',
+        element: <AdminAllPosts />,
       },
     ],
   },
