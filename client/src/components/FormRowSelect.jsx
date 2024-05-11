@@ -6,6 +6,7 @@ const FormRowSelect = ({
   isEnumList,
   titleList,
   defaultValue = '',
+  onChange,
 }) => {
   return (
     <div className="form-row">
@@ -17,6 +18,7 @@ const FormRowSelect = ({
         name={name}
         className="form-select"
         defaultValue={isEnumList ? defaultValue : list[0]}
+        onChange={onChange}
       >
         {list.map((itemValue) => {
           return isEnumList ? (

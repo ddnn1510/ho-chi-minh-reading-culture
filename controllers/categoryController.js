@@ -12,7 +12,6 @@ export const createCategory = async (req, res) => {
 };
 
 export const getCategories = async (req, res) => {
-  console.log(req.user.role);
   try {
     const categories = await Category.find({
       status:

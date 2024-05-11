@@ -16,8 +16,7 @@ const withValidationErrors = (validateValues) => {
         const errorMessages = errors.array().map((error) => error.msg);
 
         const firstMessage = errorMessages[0];
-        console.log(Object.getPrototypeOf(firstMessage));
-        if (errorMessages[0].startsWith('no job')) {
+        if (errorMessages[0].startsWith('no post')) {
           throw new NotFoundError(errorMessages);
         }
         if (errorMessages[0].startsWith('not authorized')) {

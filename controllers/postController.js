@@ -1,5 +1,6 @@
 import Post from '../models/PostModel.js';
 import Category from '../models/CategoryModel.js';
+import { StatusCodes } from 'http-status-codes';
 
 export const createPost = async (req, res) => {
   try {
@@ -23,14 +24,48 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find({
-      status:
-        req.user.role === 'admin'
-          ? { $in: ['draft', 'published'] }
-          : 'published',
-    });
-    res.json(posts);
+    const { search, postStatus, category, sort } = req.query;
+
+    const queryObject = {};
+
+    if (search) {
+      queryObject.$or = [{ title: { $regex: search, $options: 'i' } }];
+    }
+
+    if (postStatus && postStatus !== 'all') {
+      queryObject.status = postStatus;
+    }
+    if (category && category !== 'all') {
+      queryObject.category = category;
+    }
+
+    const sortOptions = {
+      newest: '-createdAt',
+      oldest: 'createdAt',
+      'a-z': 'title',
+      'z-a': '-title',
+    };
+
+    const sortKey = sortOptions[sort] || sortOptions.newest;
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const posts = await Post.find(queryObject)
+      .collation({ locale: 'en' })
+      .sort(sortKey)
+      .skip(skip)
+      .limit(limit)
+      .populate('category', 'name');
+
+    const totalPosts = await Post.countDocuments(queryObject);
+    const numOfPages = Math.ceil(totalPosts / limit);
+    res
+      .status(StatusCodes.OK)
+      .json({ totalPosts, numOfPages, currentPage: page, posts });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Failed to retrieve posts' });
   }
 };
