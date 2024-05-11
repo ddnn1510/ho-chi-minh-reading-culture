@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
-const postSchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
@@ -9,12 +13,6 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true,
-  },
-
   status: {
     type: String,
     enum: ['draft', 'published'],
@@ -26,4 +24,4 @@ const postSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('Post', postSchema);
+export default mongoose.model('Category', categorySchema);

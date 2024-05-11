@@ -5,24 +5,29 @@ import express from 'express';
 const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 
 import authRouter from './routes/authRouter.js';
 import postRouter from './routes/postRouter.js';
+import categoryRouter from './routes/categoryRouter.js';
 
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import { authenticateUser } from './middleware/authMiddleware.js';
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/posts', authenticateUser, postRouter);
+app.use('/api/v1/categories', authenticateUser, categoryRouter);
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });

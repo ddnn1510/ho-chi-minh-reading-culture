@@ -1,20 +1,45 @@
-import { Form, useNavigation } from 'react-router-dom';
+import { Form, redirect, useNavigation } from 'react-router-dom';
 import Wrapper from '../../assets/wrappers/admin/AdminFormPage';
 import { FormRow, FormRowSelect } from '../../components';
 import { POST_STATUS, TITLE_OF_POST_STATUS } from '../../../../utils/constants';
 import { CustomEditor } from '../../components/admin';
+import customFetch from '../../utils/customFetch';
+import { useState } from 'react';
 
 const AddPost = () => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
+  const [editorContent, setEditorContent] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('title', event.target.title.value);
+    formData.append('status', event.target.status.value);
+    formData.append('content', editorContent);
+
+    const data = Object.fromEntries(formData);
+
+    try {
+      await customFetch.post('/posts', data);
+      return redirect('/admin/posts');
+    } catch (error) {
+      return error;
+    }
+  };
 
   return (
     <Wrapper>
-      <Form method="post" className="form">
+      <Form method="post" className="form" onSubmit={handleSubmit}>
         <h4 className="form-title">Tạo mới bài viết</h4>
         <div className="form-center">
           <FormRow type="text" name="title" labelText="Tiêu đề" />
-          <CustomEditor name="content" labelText="Nội dung" />
+          <CustomEditor
+            name="content"
+            labelText="Nội dung"
+            setEditorContent={setEditorContent}
+          />
           <FormRowSelect
             name="status"
             labelText="Trạng thái"
@@ -26,7 +51,11 @@ const AddPost = () => {
             <button className="btn btn-block form-btn" disabled>
               Huỷ
             </button>
-            <button className="btn btn-block form-btn" disabled={isSubmitting}>
+            <button
+              className="btn btn-block form-btn"
+              disabled={isSubmitting}
+              type="submit"
+            >
               {isSubmitting ? 'Đang lưu bài' : 'Lưu bài'}
             </button>
           </div>

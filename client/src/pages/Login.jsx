@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 export const action =
   (queryClient) =>
   async ({ request }) => {
-    console.log('HELLO');
     const formData = await request.formData();
     const data = Object.fromEntries(formData);
     try {

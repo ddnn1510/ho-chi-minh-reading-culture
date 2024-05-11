@@ -1,13 +1,37 @@
-import Post from '../models/Post.js';
+import Post from '../models/PostModel.js';
+import Category from '../models/CategoryModel.js';
 
 export const createPost = async (req, res) => {
   try {
-    const { title, content } = req.body;
-    const newPost = new Post({ title, content });
+    const { title, content, status } = req.body;
+
+    // category not match in db
+    const category = await Category.findOne({ _id: req.body.category }).select(
+      '_id'
+    );
+    if (!category) {
+      return res.status(400).json({ error: 'Category not found' });
+    }
+
+    const newPost = new Post({ title, content, status, category });
     await newPost.save();
     res.status(201).json(newPost);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create post' });
+  }
+};
+
+export const getPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({
+      status:
+        req.user.role === 'admin'
+          ? { $in: ['draft', 'published'] }
+          : 'published',
+    });
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve posts' });
   }
 };
 
@@ -28,9 +52,17 @@ export const updatePost = async (req, res) => {
   try {
     const postId = req.params.id;
     const { title, content } = req.body;
+
+    const category = await Category.findOne({ _id: req.body.category }).select(
+      '_id'
+    );
+    if (!category) {
+      return res.status(400).json({ error: 'Category not found' });
+    }
+
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { title, content },
+      { title, content, category },
       { new: true }
     );
     if (!updatedPost) {
