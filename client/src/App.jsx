@@ -25,17 +25,17 @@ const router = createBrowserRouter([
         index: true,
         element: <Landing />,
       },
-      {
-        path: 'register',
-        element: <Register />,
-        action: registerAction,
-      },
-      {
-        path: 'login',
-        element: <Login />,
-        action: loginAction(queryClient),
-      },
     ],
+  },
+  {
+    path: 'register',
+    element: <Register />,
+    action: registerAction,
+  },
+  {
+    path: 'login',
+    element: <Login />,
+    action: loginAction(queryClient),
   },
   {
     path: '/admin',
