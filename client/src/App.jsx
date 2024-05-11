@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { action as registerAction } from './pages/Register';
 import { action as loginAction } from './pages/Login';
 import { loader as allPostsLoader } from './pages/admin/AllPosts';
+import { loader as addPostLoader, loader } from './pages/admin/AddPost';
 
 import { AdminAddPost, AdminLayout, AdminAllPosts } from './pages/admin';
 
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <AdminAddPost />,
+        loader: addPostLoader,
       },
       {
         path: 'posts',

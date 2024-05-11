@@ -3,6 +3,7 @@ const FormRowSelect = ({
   name,
   labelText,
   list,
+  isEnumList,
   titleList,
   defaultValue = '',
 }) => {
@@ -15,12 +16,16 @@ const FormRowSelect = ({
         id={name}
         name={name}
         className="form-select"
-        defaultValue={defaultValue}
+        defaultValue={isEnumList ? defaultValue : list[0]}
       >
         {list.map((itemValue) => {
-          return (
+          return isEnumList ? (
             <option key={itemValue} value={itemValue}>
               {titleList[itemValue]}
+            </option>
+          ) : (
+            <option key={itemValue._id} value={itemValue._id}>
+              {itemValue.name}
             </option>
           );
         })}
