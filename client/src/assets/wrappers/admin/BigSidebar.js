@@ -28,6 +28,9 @@ const Wrapper = styled.aside`
       background-color: var(--primary-500);
       color: var(--white);
       font-weight: 600;
+      a {
+        color: var(--white);
+      }
     }
     .nav-links {
       padding-top: 2rem;

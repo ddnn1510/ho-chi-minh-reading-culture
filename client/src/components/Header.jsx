@@ -1,11 +1,13 @@
 import Wrapper from '../assets/wrappers/Header';
 import bannerImg from '../assets/images/banner.png';
+import TopNav from './TopNav';
+
 const Header = () => {
   return (
     <Wrapper>
-      <nav className="navbar"></nav>
-      <div className="banner">
-        <div className="banner-container">
+      <TopNav />
+      <div className="banner-container">
+        <div className="banner">
           <img src={bannerImg} alt="banner" className="banner-img" />
         </div>
       </div>

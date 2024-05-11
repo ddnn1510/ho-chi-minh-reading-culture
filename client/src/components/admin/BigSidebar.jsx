@@ -1,6 +1,7 @@
 import Wrapper from '../../assets/wrappers/admin/BigSidebar';
 import NavLinks from './NavLinks';
 import { useAdminContext } from '../../pages/admin/AdminLayout';
+import { Link } from 'react-router-dom';
 
 const BigSidebar = () => {
   const { showSidebar } = useAdminContext();
@@ -13,7 +14,9 @@ const BigSidebar = () => {
         }
       >
         <div className="content">
-          <header>KGVHĐ Hồ Chí Minh</header>
+          <header>
+            <Link to="/">KGVHĐ Hồ Chí Minh</Link>
+          </header>
           <NavLinks isBigSidebar />
         </div>
       </div>

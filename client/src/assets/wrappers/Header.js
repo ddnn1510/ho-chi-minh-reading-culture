@@ -7,11 +7,11 @@ const Wrapper = styled.div`
   .navbar {
   }
 
-  .banner {
+  .banner-container {
     padding: 60px 1.5rem;
   }
 
-  .banner-container {
+  .banner {
     margin: 0 auto;
     max-width: 1280px;
   }
@@ -21,21 +21,48 @@ const Wrapper = styled.div`
   }
 
   .title {
-    padding: 24px;
-    font-size: 32px;
+    padding: 16px 24px;
+    font-size: 28px;
     background-color: var(--primary-900);
     color: var(--white);
+    font-weight: bold;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .banner-container {
+      padding: 40px 1rem;
+    }
   }
 
   @media screen and (max-width: 1024px) {
-    .banner {
+    .banner-container {
       padding: 1rem;
     }
 
     .title {
+      padding: 16px 16px;
+      font-size: 22px;
+      line-height: 28px;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .title {
+      padding: 12px 16px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .title {
       padding: 8px 16px;
       font-size: 18px;
-      line-height: 28px;
+    }
+  }
+
+  @media screen and (max-width: 481px) {
+    .title {
+      padding: 8px 16px;
+      font-size: 18px;
     }
   }
 `;
