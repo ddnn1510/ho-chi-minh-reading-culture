@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 
 import authRouter from './routes/authRouter.js';
+import postRouter from './routes/postRouter.js';
 
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/posts', postRouter);
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });
