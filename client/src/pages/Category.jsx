@@ -33,7 +33,7 @@ const Category = () => {
 
   return (
     <Wrapper>
-      <article>Category {categoryId}</article>
+      <article>{category ? category.name : 'Default category'}</article>
       <Sidebar></Sidebar>
     </Wrapper>
   );

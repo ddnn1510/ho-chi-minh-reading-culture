@@ -23,15 +23,15 @@ const HomeLayout = () => {
   });
 
   return (
-    <Wrapper>
-      <Header />
-      <main>
-        <CategoriesContext.Provider value={categoriesQuery}>
+    <CategoriesContext.Provider value={categoriesQuery}>
+      <Wrapper>
+        <Header />
+        <main>
           <Outlet />
-        </CategoriesContext.Provider>
-      </main>
-      <Footer />
-    </Wrapper>
+        </main>
+        <Footer />
+      </Wrapper>
+    </CategoriesContext.Provider>
   );
 };
 export default HomeLayout;

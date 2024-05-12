@@ -1,14 +1,12 @@
 import Wrapper from '../assets/wrappers/TopNav';
 import { NavLink } from 'react-router-dom';
-import { categoryLinks } from '../utils/links';
 import logoSchool from '../assets/images/logo-school.svg';
 import { FaBars, FaCaretDown } from 'react-icons/fa';
 import { useState } from 'react';
 import ModalNav from './ModalNav';
 
-const TopNav = () => {
+const TopNav = ({ categoryList }) => {
   const [showNavbar, setShowNavbar] = useState(false);
-
   const toggleNavbar = () => {
     setShowNavbar(!showNavbar);
   };
@@ -34,11 +32,16 @@ const TopNav = () => {
               <FaCaretDown />
             </button>
             <div className="dropdown-content">
-              {categoryLinks.map((link) => {
-                const { text, path } = link;
+              {categoryList.map((item) => {
+                const { _id, name } = item;
                 return (
-                  <NavLink to={path} key={text} className="nav-link" end>
-                    {text}
+                  <NavLink
+                    to={`/category/${_id}`}
+                    key={name}
+                    className="nav-link"
+                    end
+                  >
+                    {name}
                   </NavLink>
                 );
               })}
@@ -53,7 +56,11 @@ const TopNav = () => {
           </button>
         </div>
       </div>
-      <ModalNav showNavbar={showNavbar} toggleNavbar={toggleNavbar} />
+      <ModalNav
+        categoryList={categoryList}
+        showNavbar={showNavbar}
+        toggleNavbar={toggleNavbar}
+      />
     </Wrapper>
   );
 };

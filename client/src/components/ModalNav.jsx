@@ -1,11 +1,10 @@
 import { FaCaretDown, FaTimes } from 'react-icons/fa';
 import Wrapper from '../assets/wrappers/ModalNav';
-import NavLinks from './admin/NavLinks';
 import { NavLink } from 'react-router-dom';
 import { categoryLinks } from '../utils/links';
 import { useState } from 'react';
 
-const ModalNav = ({ showNavbar, toggleNavbar }) => {
+const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
@@ -39,16 +38,16 @@ const ModalNav = ({ showNavbar, toggleNavbar }) => {
                 <FaCaretDown />
               </button>
               <div className="dropdown-content">
-                {categoryLinks.map((link) => {
-                  const { text, path } = link;
+                {categoryList.map((item) => {
+                  const { _id, name } = item;
                   return (
                     <NavLink
-                      to={path}
-                      key={text}
+                      to={`/category/${_id}`}
+                      key={name}
                       className="nav-link"
                       onClick={toggleClose}
                     >
-                      {text}
+                      {name}
                     </NavLink>
                   );
                 })}

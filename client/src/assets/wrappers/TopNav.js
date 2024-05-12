@@ -74,6 +74,7 @@ const Wrapper = styled.nav`
     display: flex;
     align-items: center;
     gap: 5px;
+    cursor: pointer;
   }
 
   .topnav-content .dropdown:has(a.active) .dropbtn {
@@ -81,6 +82,7 @@ const Wrapper = styled.nav`
   }
 
   .topnav-content .dropdown-content {
+    max-width: 300px;
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -102,7 +104,7 @@ const Wrapper = styled.nav`
     border-bottom: 1px solid var(--grey-300);
   }
 
-  .topnav-content .topnav-content a:hover,
+  .topnav-content a:hover,
   .topnav-content .dropdown:hover .dropbtn {
     background-color: rgba(0, 0, 0, 0.2);
     color: white;
