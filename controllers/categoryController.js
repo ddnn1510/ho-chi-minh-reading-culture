@@ -25,7 +25,7 @@ export const getCategoriesInfo = async (req, res) => {
     const categories = await Category.find(
       { status: 'published' },
       { name: 1, intro: 1, intro_image: 1 }
-    ).sort({ createdAt: -1 });
+    ).sort({ createdAt: 1 });
 
     console.log(categories);
 
