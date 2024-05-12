@@ -1,4 +1,10 @@
-import { Form, redirect, useLoaderData, useNavigation } from 'react-router-dom';
+import {
+  Form,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom';
 import Wrapper from '../../assets/wrappers/admin/AdminFormPage';
 import { FormRow, FormRowSelect } from '../../components';
 import { POST_STATUS, TITLE_OF_POST_STATUS } from '../../../../utils/constants';
@@ -13,12 +19,13 @@ export const loader = async ({ request }) => {
     return { categories: data };
   } catch (error) {
     toast.error(error?.response?.data?.msg);
-    return redirect('/');
+    return navigate('/');
   }
 };
 
 const AddPost = () => {
   const navigation = useNavigation();
+  const navigate = useNavigate();
   const isSubmitting = navigation.state === 'submitting';
   const [editorContent, setEditorContent] = useState('');
   const { categories } = useLoaderData();
@@ -34,9 +41,13 @@ const AddPost = () => {
 
     const data = Object.fromEntries(formData);
 
+    if (!formData.get('content')) {
+      return;
+    }
+
     try {
       await customFetch.post('/posts', data);
-      return redirect('/admin/posts');
+      return navigate('/admin/posts');
     } catch (error) {
       return error;
     }

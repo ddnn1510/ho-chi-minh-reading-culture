@@ -7,11 +7,13 @@ const FormRowSelect = ({
   titleList,
   defaultValue = '',
   onChange,
+  required = true,
 }) => {
   return (
     <div className="form-row">
       <label htmlFor={name} className="form-label">
         {labelText || name}
+        {required ? <span className="text-primary">*</span> : ''}
       </label>
       <select
         id={name}

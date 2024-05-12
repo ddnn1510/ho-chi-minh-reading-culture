@@ -1,9 +1,17 @@
 /* eslint-disable react/no-unescaped-entities */
+import { useOutletContext } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/LandingPage';
 import { useCategories } from './HomeLayout';
+import { useEffect } from 'react';
 
 const Landing = () => {
   const { data: categoryList, isLoading, isError } = useCategories();
+
+  const { setCategoryName } = useOutletContext();
+
+  useEffect(() => {
+    setCategoryName('Giới thiệu');
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;

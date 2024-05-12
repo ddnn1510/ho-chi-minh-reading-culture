@@ -2,7 +2,7 @@
 import { Outlet } from 'react-router-dom';
 import { Header, Footer } from '../components';
 import Wrapper from '../assets/wrappers/HomeLayout';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import customFetch from '../utils/customFetch';
 
@@ -22,12 +22,15 @@ const HomeLayout = () => {
     queryFn: fetchCategories,
   });
 
+  const [categoryName, setCategoryName] = useState();
+
   return (
     <CategoriesContext.Provider value={categoriesQuery}>
       <Wrapper>
         <Header />
+        <div className="category-name">{categoryName || ''}</div>
         <main>
-          <Outlet />
+          <Outlet context={{ setCategoryName }} />
         </main>
         <Footer />
       </Wrapper>

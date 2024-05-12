@@ -30,13 +30,14 @@ const SearchContainer = () => {
   return (
     <Wrapper>
       <Form className="form">
-        <h5 className="form-title">search form</h5>
+        {/* <h5 className="form-title">search form</h5> */}
         <div className="form-center">
           <FormRow
             type="search"
             name="search"
             labelText={'Tìm kiếm'}
             defaultValue={search}
+            required={false}
             onChange={debounce((form) => {
               submit(form);
             })}
@@ -48,6 +49,7 @@ const SearchContainer = () => {
             list={[{ value: 'all', name: 'Tất cả', _id: 'all' }, ...categories]}
             defaultValue={'Tất cả'}
             isEnumList={false}
+            required={false}
             onChange={(e) => {
               submit(e.currentTarget.form);
             }}
@@ -60,6 +62,7 @@ const SearchContainer = () => {
             titleList={{ all: 'Tất cả', ...TITLE_OF_POST_STATUS }}
             defaultValue={'Tất cả'}
             isEnumList={true}
+            required={false}
             onChange={(e) => {
               submit(e.currentTarget.form);
             }}
@@ -72,6 +75,7 @@ const SearchContainer = () => {
             titleList={{ all: 'Tất cả', ...TITLE_OF_POST_SORT_BY }}
             defaultValue={'Tất cả'}
             isEnumList={true}
+            required={false}
             onChange={(e) => {
               submit(e.currentTarget.form);
             }}

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.aside`
-  .widget:not(:last-child) {
-    margin-bottom: 50px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
 
   .widget-title {
     padding-bottom: 1rem;
@@ -39,6 +39,11 @@ const Wrapper = styled.aside`
     font-size: 16px;
     font-weight: bold;
     color: var(--text-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
   .post-title:hover {
@@ -62,6 +67,19 @@ const Wrapper = styled.aside`
     display: block;
     margin: 0 auto;
     width: 200px;
+  }
+
+  .widget-empty {
+    text-align: center;
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: 992px) {
+    gap: 50px;
+
+    .widget-qr {
+      order: -1;
+    }
   }
 `;
 

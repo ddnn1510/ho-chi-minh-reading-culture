@@ -6,7 +6,7 @@ import { useCategories } from '../pages/HomeLayout';
 const Header = () => {
   const { data: categoryList, isLoading, isError } = useCategories();
   if (isLoading) {
-    return <div>Loading...</div>;
+    // return <div>Loading...</div>;
   }
 
   if (isError) {
@@ -20,7 +20,6 @@ const Header = () => {
           <img src={bannerImg} alt="banner" className="banner-img" />
         </div>
       </div>
-      <div className="title">Giới thiệu</div>
     </Wrapper>
   );
 };

@@ -4,7 +4,13 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const CustomEditor = ({ name, labelText, defaultValue, setEditorContent }) => {
+const CustomEditor = ({
+  name,
+  labelText,
+  defaultValue,
+  setEditorContent,
+  required = true,
+}) => {
   const [value, setValue] = useState('');
   const quill = useRef();
 
@@ -69,14 +75,20 @@ const CustomEditor = ({ name, labelText, defaultValue, setEditorContent }) => {
   const modules = {
     toolbar: {
       container: [
-        [{ header: [1, 2, 3, 4, false] }],
-        ['bold', 'italic', 'underline', 'blockquote'],
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{ color: [] }],
         [
           { list: 'ordered' },
           { list: 'bullet' },
           { indent: '-1' },
           { indent: '+1' },
+        ],
+        [
+          { align: '' },
+          { align: 'center' },
+          { align: 'right' },
+          { align: 'justify' },
         ],
         ['link', 'image', 'video'],
         ['clean'],
@@ -101,6 +113,7 @@ const CustomEditor = ({ name, labelText, defaultValue, setEditorContent }) => {
     'list',
     'bullet',
     'indent',
+    'align',
     'link',
     'image',
     'video',
@@ -112,6 +125,7 @@ const CustomEditor = ({ name, labelText, defaultValue, setEditorContent }) => {
     <div className="form-row">
       <label htmlFor="name" className="form-label">
         {labelText || name}
+        {required ? <span className="text-primary">*</span> : ''}
       </label>
       <ReactQuill
         ref={(el) => (quill.current = el)}
