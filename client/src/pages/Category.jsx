@@ -29,8 +29,6 @@ const Category = () => {
     return <div>Error loading category</div>;
   }
 
-  console.log(category);
-
   return (
     <Wrapper>
       <article>{category ? category.name : 'Default category'}</article>

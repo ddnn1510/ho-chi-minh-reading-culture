@@ -29,8 +29,6 @@ const Post = () => {
     return <div>Error loading category</div>;
   }
 
-  console.log(post);
-
   return (
     <Wrapper>
       <article>Post {postId}</article>

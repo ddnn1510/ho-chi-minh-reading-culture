@@ -8,15 +8,19 @@ import {
   getCategoryById,
   updateCategory,
 } from '../controllers/categoryController.js';
+import { authenticateUser } from '../middleware/authMiddleware.js';
 
 //router get catgories info
 router.route('/intro').get(getCategoriesInfo);
 
-router.route('/').post(createCategory).get(getCategories);
+router
+  .route('/')
+  .post(authenticateUser, createCategory)
+  .get(authenticateUser, getCategories);
 router
   .route('/:id')
-  .put(updateCategory)
-  .delete(deleteCategory)
+  .put(authenticateUser, updateCategory)
+  .delete(authenticateUser, deleteCategory)
   .get(getCategoryById);
 
 export default router;

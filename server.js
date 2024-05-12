@@ -26,8 +26,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/posts', authenticateUser, postRouter);
-app.use('/api/v1/categories', authenticateUser, categoryRouter);
+app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/categories', categoryRouter);
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });

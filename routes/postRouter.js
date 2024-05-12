@@ -9,10 +9,16 @@ import {
   getNewestPosts,
   getPostsByCategory,
 } from '../controllers/postController.js';
+import { authenticateUser } from '../middleware/authMiddleware.js';
 
-router.route('/').post(createPost).get(getPosts);
-router.route('/:id').put(updatePost).delete(deletePost).get(getPost);
+router.route('/').post(authenticateUser, createPost).get(getPosts);
 router.route('/newest').get(getNewestPosts);
-router.route('/category/:categoryId').get(getPostsByCategory);
+
+router
+  .route('/:id')
+  .put(authenticateUser, updatePost)
+  .delete(authenticateUser, deletePost)
+  .get(getPost);
+router.route('/category/:id').get(getPostsByCategory);
 
 export default router;

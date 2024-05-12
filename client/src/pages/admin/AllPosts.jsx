@@ -33,7 +33,6 @@ const getCategories = async () => {
 export const loader =
   (queryClient) =>
   async ({ request }) => {
-    console.log('HELLO');
     const params = Object.fromEntries([
       ...new URL(request.url).searchParams.entries(),
     ]);
@@ -48,8 +47,6 @@ const AllPosts = () => {
   const { searchValues } = useLoaderData();
 
   const { data } = useQuery(allPostsQuery(searchValues));
-
-  console.log(data);
 
   const [categories, setCategories] = useState([]);
 

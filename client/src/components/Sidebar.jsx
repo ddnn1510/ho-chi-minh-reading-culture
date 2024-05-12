@@ -1,86 +1,75 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Sidebar';
+import customFetch from '../utils/customFetch';
+import { useQuery } from '@tanstack/react-query';
 
-const newestPosts = [
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-];
+const fetchNewestPosts = async ({ queryKey }) => {
+  const [, { limit }] = queryKey;
 
-const relatedPosts = [
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-  {
-    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
-    path: '/',
-  },
-];
+  const { data } = await customFetch.get(`/posts/newest?limit=${limit}`);
+  return data;
+};
+
+const fetchRelatedPosts = async ({ queryKey }) => {
+  const [, { categoryId, limit }] = queryKey;
+
+  const { data } = await customFetch.get(
+    `/posts/category/${categoryId}?limit=${limit}`
+  );
+  return data;
+};
 
 const Sidebar = () => {
+  const { categoryId } = useParams();
+
+  const { data: relatedPosts } = useQuery({
+    queryKey: ['relatedPosts', { categoryId, limit: 5 }],
+    queryFn: fetchRelatedPosts,
+  });
+  const { data: newestPosts } = useQuery({
+    queryKey: ['newestPosts', { limit: 5 }],
+    queryFn: fetchNewestPosts,
+  });
+
   return (
     <Wrapper>
+      {}
       <div className="widget">
         <div className="widget-title">Bài viết cùng mục</div>
         <div className="widget-list">
-          {relatedPosts.map((item, index) => (
-            <div className="post-item" key={index}>
-              <div className="post-no">{index + 1}.</div>
-              <Link to={item.path} className="post-title">
-                {item.title}
-              </Link>
-            </div>
-          ))}
+          {relatedPosts && relatedPosts.length !== 0 ? (
+            relatedPosts.map((item, index) => (
+              <div className="post-item" key={index}>
+                <div className="post-no">{index + 1}.</div>
+                <Link to={`/post/${item._id}`} className="post-title">
+                  {item.title}
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div>Không có bài viết cùng mục</div>
+          )}
         </div>
-        <Link to="/" className="view-more">
-          Xem tất cả
-        </Link>
       </div>
       <div className="widget">
         <div className="widget-title">Bài viết mới nhất</div>
         <div className="widget-list">
-          {newestPosts.map((item, index) => (
-            <div className="post-item" key={index}>
-              <div className="post-no">{index + 1}.</div>
-              <Link to={item.path} className="post-title">
-                {item.title}
-              </Link>
-            </div>
-          ))}
+          {newestPosts && newestPosts.length !== 0
+            ? newestPosts.map((item, index) => (
+                <>
+                  <div className="post-item" key={index}>
+                    <div className="post-no">{index + 1}.</div>
+                    <Link to={`/post/${item._id}`} className="post-title">
+                      {item.title}
+                    </Link>
+                  </div>
+                  <Link to="/" className="view-more">
+                    Xem tất cả
+                  </Link>
+                </>
+              ))
+            : 'Không có bài viết nào'}
         </div>
-        <Link to="/" className="view-more">
-          Xem tất cả
-        </Link>
       </div>
       <div className="widget">
         <div className="widget-title">Quét QR bài viết</div>

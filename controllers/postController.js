@@ -65,7 +65,6 @@ export const getPosts = async (req, res) => {
       .status(StatusCodes.OK)
       .json({ totalPosts, numOfPages, currentPage: page, posts });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: 'Failed to retrieve posts' });
   }
 };
@@ -73,11 +72,11 @@ export const getPosts = async (req, res) => {
 export const getPost = async (req, res) => {
   try {
     const postId = req.params.id;
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('category', 'name');
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    res.json(post);
+    res.status(200).json(post);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve post' });
   }
@@ -92,7 +91,10 @@ export const getPostsByCategory = async (req, res) => {
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
-    const posts = await Post.find({ category: categoryId }).limit(5);
+    const posts = await Post.find({
+      category: categoryId,
+      status: 'published',
+    }).limit(5);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve posts' });
@@ -102,7 +104,9 @@ export const getPostsByCategory = async (req, res) => {
 // get 5 newest posts
 export const getNewestPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 }).limit(5);
+    const posts = await Post.find({ status: 'published' })
+      .sort({ createdAt: -1 })
+      .limit(5);
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve posts' });

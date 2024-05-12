@@ -14,7 +14,6 @@ export const createCategory = async (req, res) => {
     await newCategory.save();
     res.status(201).json(newCategory);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: 'Failed to create categories' });
   }
 };
@@ -27,11 +26,8 @@ export const getCategoriesInfo = async (req, res) => {
       { name: 1, intro: 1, intro_image: 1 }
     ).sort({ createdAt: 1 });
 
-    console.log(categories);
-
     res.json(categories);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: 'Failed to retrieve categories' });
   }
 };
@@ -47,7 +43,6 @@ export const getCategories = async (req, res) => {
 
     res.json(categories);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: 'Failed to retrieve categories' });
   }
 };
