@@ -47,14 +47,14 @@ const relatedPosts = [
   },
 ];
 
-const PostSidebar = () => {
+const Sidebar = () => {
   return (
     <Wrapper>
       <div className="widget">
         <div className="widget-title">Bài viết cùng mục</div>
         <div className="widget-list">
           {relatedPosts.map((item, index) => (
-            <div className="post-item">
+            <div className="post-item" key={index}>
               <div className="post-no">{index + 1}.</div>
               <Link to={item.path} className="post-title">
                 {item.title}
@@ -70,7 +70,7 @@ const PostSidebar = () => {
         <div className="widget-title">Bài viết mới nhất</div>
         <div className="widget-list">
           {newestPosts.map((item, index) => (
-            <div className="post-item">
+            <div className="post-item" key={index}>
               <div className="post-no">{index + 1}.</div>
               <Link to={item.path} className="post-title">
                 {item.title}
@@ -93,4 +93,4 @@ const PostSidebar = () => {
     </Wrapper>
   );
 };
-export default PostSidebar;
+export default Sidebar;

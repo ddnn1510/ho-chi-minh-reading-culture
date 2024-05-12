@@ -83,6 +83,32 @@ export const getPost = async (req, res) => {
   }
 };
 
+// get all posts of category
+export const getPostsByCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+
+    const category = await Category.findById(categoryId).select('_id');
+    if (!category) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    const posts = await Post.find({ category: categoryId }).limit(5);
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve posts' });
+  }
+};
+
+// get 5 newest posts
+export const getNewestPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 }).limit(5);
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve posts' });
+  }
+};
+
 export const updatePost = async (req, res) => {
   try {
     const postId = req.params.id;
