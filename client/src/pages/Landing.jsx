@@ -1,43 +1,17 @@
+/* eslint-disable react/no-unescaped-entities */
 import Wrapper from '../assets/wrappers/LandingPage';
+import { useCategories } from './HomeLayout';
 
 const Landing = () => {
-  const categoryList = [
-    {
-      title: 'Quê hương và gia đình',
-      imgUrl:
-        'https://lh3.googleusercontent.com/H-OSYoCinxLgreXPllOj0pS8UCwooyYK7VaWQyDf7kuD_3DzpY8j0_w6kVE4BNhGthNpV1xOQ6YeewCHG6zwEEBgr4QJzMOuFol119D_DBJASp25G7Y_2wWehN-7O-CMdQ=w1280',
-      description:
-        'Chỉ cần nhấp chuột vào giao diện này, bạn sẽ tìm thấy những thông tin đầy giá trị về truyền thống quê hương và gia đình của Chủ tịch Hồ Chí Minh. Những hình ảnh, bài viết có liên quan như: Hình ảnh về quê Bác, hình ảnh về cha, mẹ, anh chị của Bác.... Đặc biệt, tại giao diện này cũng giới thiệu cho các bạn tìm đọc những cuốn sách hay viết về quê hương và gia đình của Bác.',
-    },
-    {
-      title: 'Quê hương và gia đình',
-      imgUrl:
-        'https://lh3.googleusercontent.com/H-OSYoCinxLgreXPllOj0pS8UCwooyYK7VaWQyDf7kuD_3DzpY8j0_w6kVE4BNhGthNpV1xOQ6YeewCHG6zwEEBgr4QJzMOuFol119D_DBJASp25G7Y_2wWehN-7O-CMdQ=w1280',
-      description:
-        'Chỉ cần nhấp chuột vào giao diện này, bạn sẽ tìm thấy những thông tin đầy giá trị về truyền thống quê hương và gia đình của Chủ tịch Hồ Chí Minh. Những hình ảnh, bài viết có liên quan như: Hình ảnh về quê Bác, hình ảnh về cha, mẹ, anh chị của Bác.... Đặc biệt, tại giao diện này cũng giới thiệu cho các bạn tìm đọc những cuốn sách hay viết về quê hương và gia đình của Bác.',
-    },
-    {
-      title: 'Quê hương và gia đình',
-      imgUrl:
-        'https://lh3.googleusercontent.com/H-OSYoCinxLgreXPllOj0pS8UCwooyYK7VaWQyDf7kuD_3DzpY8j0_w6kVE4BNhGthNpV1xOQ6YeewCHG6zwEEBgr4QJzMOuFol119D_DBJASp25G7Y_2wWehN-7O-CMdQ=w1280',
-      description:
-        'Chỉ cần nhấp chuột vào giao diện này, bạn sẽ tìm thấy những thông tin đầy giá trị về truyền thống quê hương và gia đình của Chủ tịch Hồ Chí Minh. Những hình ảnh, bài viết có liên quan như: Hình ảnh về quê Bác, hình ảnh về cha, mẹ, anh chị của Bác.... Đặc biệt, tại giao diện này cũng giới thiệu cho các bạn tìm đọc những cuốn sách hay viết về quê hương và gia đình của Bác.',
-    },
-    {
-      title: 'Quê hương và gia đình',
-      imgUrl:
-        'https://lh3.googleusercontent.com/H-OSYoCinxLgreXPllOj0pS8UCwooyYK7VaWQyDf7kuD_3DzpY8j0_w6kVE4BNhGthNpV1xOQ6YeewCHG6zwEEBgr4QJzMOuFol119D_DBJASp25G7Y_2wWehN-7O-CMdQ=w1280',
-      description:
-        'Chỉ cần nhấp chuột vào giao diện này, bạn sẽ tìm thấy những thông tin đầy giá trị về truyền thống quê hương và gia đình của Chủ tịch Hồ Chí Minh. Những hình ảnh, bài viết có liên quan như: Hình ảnh về quê Bác, hình ảnh về cha, mẹ, anh chị của Bác.... Đặc biệt, tại giao diện này cũng giới thiệu cho các bạn tìm đọc những cuốn sách hay viết về quê hương và gia đình của Bác.',
-    },
-    {
-      title: 'Quê hương và gia đình',
-      imgUrl:
-        'https://lh3.googleusercontent.com/H-OSYoCinxLgreXPllOj0pS8UCwooyYK7VaWQyDf7kuD_3DzpY8j0_w6kVE4BNhGthNpV1xOQ6YeewCHG6zwEEBgr4QJzMOuFol119D_DBJASp25G7Y_2wWehN-7O-CMdQ=w1280',
-      description:
-        'Chỉ cần nhấp chuột vào giao diện này, bạn sẽ tìm thấy những thông tin đầy giá trị về truyền thống quê hương và gia đình của Chủ tịch Hồ Chí Minh. Những hình ảnh, bài viết có liên quan như: Hình ảnh về quê Bác, hình ảnh về cha, mẹ, anh chị của Bác.... Đặc biệt, tại giao diện này cũng giới thiệu cho các bạn tìm đọc những cuốn sách hay viết về quê hương và gia đình của Bác.',
-    },
-  ];
+  const { data: categoryList, isLoading, isError } = useCategories();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading categories</div>;
+  }
 
   return (
     <Wrapper>
@@ -93,15 +67,13 @@ const Landing = () => {
         <h4 className="text-center font-bold">Danh mục bài viết</h4>
         <div className="category-list">
           {categoryList.map((category, index) => (
-            <div className="category-item">
-              <img className="category-img" src={category.imgUrl} />
+            <div className="category-item" key={index}>
+              <img className="category-img" src={category.intro_image} />
               <div className="category-content">
                 <div className="category-title">
-                  {index + 1}: {category.title}
+                  {index + 1}: {category.name}
                 </div>
-                <div className="category-description">
-                  {category.description}
-                </div>
+                <div className="category-description">{category.intro}</div>
               </div>
             </div>
           ))}

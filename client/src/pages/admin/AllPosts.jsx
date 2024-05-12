@@ -20,7 +20,6 @@ const allPostsQuery = (params) => {
       const { data } = await customFetch.get('/posts', {
         params,
       });
-      console.log('API', data);
       return data;
     },
   };

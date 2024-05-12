@@ -18,6 +18,14 @@ const categorySchema = new mongoose.Schema({
     enum: ['draft', 'published'],
     default: 'draft',
   },
+  intro: {
+    type: String,
+    required: true,
+  },
+  intro_image: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

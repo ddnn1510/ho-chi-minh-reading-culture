@@ -2,12 +2,37 @@ import Category from '../models/CategoryModel.js';
 
 export const createCategory = async (req, res) => {
   try {
-    const { name, title, content, status } = req.body;
-    const newCategory = new Category({ name, title, content, status });
+    const { name, title, content, status, intro, intro_image } = req.body;
+    const newCategory = new Category({
+      name,
+      title,
+      content,
+      status,
+      intro_image,
+      intro,
+    });
     await newCategory.save();
     res.status(201).json(newCategory);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Failed to create categories' });
+  }
+};
+
+//get catories info select only image_info and info sort by created date
+export const getCategoriesInfo = async (req, res) => {
+  try {
+    const categories = await Category.find(
+      { status: 'published' },
+      { name: 1, intro: 1, intro_image: 1 }
+    ).sort({ createdAt: -1 });
+
+    console.log(categories);
+
+    res.json(categories);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Failed to retrieve categories' });
   }
 };
 
