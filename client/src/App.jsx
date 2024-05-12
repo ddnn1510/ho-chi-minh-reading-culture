@@ -1,5 +1,14 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { HomeLayout, Register, Login, Landing, Error, Contest } from './pages';
+import {
+  HomeLayout,
+  Register,
+  Login,
+  Landing,
+  Error,
+  Contest,
+  Category,
+  Post,
+} from './pages';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -7,7 +16,6 @@ import { action as registerAction } from './pages/Register';
 import { action as loginAction } from './pages/Login';
 import { loader as allPostsLoader } from './pages/admin/AllPosts';
 import { loader as addPostLoader, loader } from './pages/admin/AddPost';
-
 import { AdminAddPost, AdminLayout, AdminAllPosts } from './pages/admin';
 
 const queryClient = new QueryClient({
@@ -27,6 +35,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
+      },
+      {
+        path: 'category/:categoryId',
+        element: <Category />,
+      },
+      {
+        path: 'post/:postId',
+        element: <Post />,
       },
       {
         path: 'contest',

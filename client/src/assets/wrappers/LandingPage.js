@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  max-width: 1280px;
-  margin: 60px auto 80px;
-  padding: 0 40px;
-  font-size: 20px;
-
   .introduce-section img {
     max-width: 100%;
     margin: 50px auto;
@@ -54,14 +49,7 @@ const Wrapper = styled.div`
     text-align: justify;
   }
 
-  @media screen and (max-width: 1440px) {
-    font-size: 18px;
-  }
-
   @media screen and (max-width: 768px) {
-    font-size: 16px;
-    margin: 30px auto 50px;
-
     .introduce-section img {
       margin: 30px auto;
     }
@@ -91,8 +79,6 @@ const Wrapper = styled.div`
   }
 
   @media screen and (max-width: 481px) {
-    padding: 0 24px;
-
     .category-img {
       width: 100%;
     }
