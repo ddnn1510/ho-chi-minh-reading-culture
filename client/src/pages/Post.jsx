@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Post';
-import { PostSidebar } from '../components';
+import { Sidebar } from '../components';
 
 const Post = () => {
   const { postId } = useParams();
@@ -8,7 +8,7 @@ const Post = () => {
   return (
     <Wrapper>
       <article>Post {postId}</article>
-      <PostSidebar></PostSidebar>
+      <Sidebar></Sidebar>
     </Wrapper>
   );
 };

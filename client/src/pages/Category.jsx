@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Post';
-import { CategorySidebar } from '../components';
+import { Sidebar } from '../components';
 
 const Category = () => {
   const { categoryId } = useParams();
@@ -8,7 +8,7 @@ const Category = () => {
   return (
     <Wrapper>
       <article>Category {categoryId}</article>
-      <CategorySidebar></CategorySidebar>
+      <Sidebar></Sidebar>
     </Wrapper>
   );
 };

@@ -1,5 +1,28 @@
-import Wrapper from '../assets/wrappers/Sidebar';
 import { Link } from 'react-router-dom';
+import Wrapper from '../assets/wrappers/Sidebar';
+
+const newestPosts = [
+  {
+    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
+    path: '/',
+  },
+  {
+    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
+    path: '/',
+  },
+  {
+    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
+    path: '/',
+  },
+  {
+    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
+    path: '/',
+  },
+  {
+    title: 'Hành trình 30 năm tìm đường cứu nước của Bác',
+    path: '/',
+  },
+];
 
 const relatedPosts = [
   {
@@ -24,15 +47,29 @@ const relatedPosts = [
   },
 ];
 
-const CategorySidebar = () => {
+const PostSidebar = () => {
   return (
     <Wrapper>
       <div className="widget">
-        <div className="widget-title">
-          Các bài viết về Quê hương và gia đình
-        </div>
+        <div className="widget-title">Bài viết cùng mục</div>
         <div className="widget-list">
           {relatedPosts.map((item, index) => (
+            <div className="post-item">
+              <div className="post-no">{index + 1}.</div>
+              <Link to={item.path} className="post-title">
+                {item.title}
+              </Link>
+            </div>
+          ))}
+        </div>
+        <Link to="/" className="view-more">
+          Xem tất cả
+        </Link>
+      </div>
+      <div className="widget">
+        <div className="widget-title">Bài viết mới nhất</div>
+        <div className="widget-list">
+          {newestPosts.map((item, index) => (
             <div className="post-item">
               <div className="post-no">{index + 1}.</div>
               <Link to={item.path} className="post-title">
@@ -56,4 +93,4 @@ const CategorySidebar = () => {
     </Wrapper>
   );
 };
-export default CategorySidebar;
+export default PostSidebar;

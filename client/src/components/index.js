@@ -3,5 +3,4 @@ export { default as FormRowSelect } from './FormRowSelect';
 export { default as Header } from './Header';
 export { default as Footer } from './Footer';
 export { default as TopNav } from './TopNav';
-export { default as CategorySidebar } from './CategorySidebar';
-export { default as PostSidebar } from './PostSidebar';
+export { default as Sidebar } from './Sidebar';

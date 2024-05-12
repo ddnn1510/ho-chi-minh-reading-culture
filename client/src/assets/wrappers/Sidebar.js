@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.aside`
-  .widget {
+  .widget:not(:last-child) {
     margin-bottom: 50px;
   }
 
