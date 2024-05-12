@@ -53,7 +53,7 @@ const Wrapper = styled.aside`
     display: flex;
     align-items: center;
     color: var(--text-secondary-color);
-    padding: 1rem 0;
+    padding: 1rem;
     text-transform: capitalize;
     transition: var(--transition);
   }
@@ -114,7 +114,7 @@ const Wrapper = styled.aside`
     font-size: 16px;
     border: none;
     outline: none;
-    padding: 14px 16px;
+    padding: 16px;
     background-color: inherit;
     color: var(--text-secondary-color);
     font-family: inherit;
@@ -123,6 +123,8 @@ const Wrapper = styled.aside`
     align-items: center;
     justify-content: center;
     gap: 5px;
+    line-height: 1.5;
+    cursor: pointer;
   }
 
   .nav-links.responsive .dropdown:has(a.active) {

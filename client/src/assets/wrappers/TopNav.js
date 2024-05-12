@@ -24,7 +24,6 @@ const Wrapper = styled.nav`
     color: var(--white);
     font-size: 20px;
     font-weight: 700;
-    line-height: 1.4;
   }
 
   .logo-text.active {
@@ -64,6 +63,7 @@ const Wrapper = styled.nav`
 
   .topnav-content .dropdown .dropbtn {
     font-size: 17px;
+    line-height: 1.5;
     border: none;
     outline: none;
     color: white;
@@ -91,7 +91,7 @@ const Wrapper = styled.nav`
 
   .topnav-content .dropdown-content a {
     float: none;
-    color: black;
+    color: var(--text-color);
     padding: 1rem;
     text-decoration: none;
     display: block;
@@ -111,7 +111,7 @@ const Wrapper = styled.nav`
   .topnav-content .dropdown-content a:hover,
   .topnav-content .dropdown-content .active {
     background-color: var(--primary-100);
-    color: black;
+    color: var(--text-color);
   }
 
   .topnav-content .dropdown:hover .dropdown-content {
