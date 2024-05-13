@@ -86,6 +86,7 @@ export const getPost = async (req, res) => {
 export const getPostsByCategory = async (req, res) => {
   try {
     const categoryId = req.params.id;
+    const limit = Number(req.query.limit) || 5;
 
     const category = await Category.findById(categoryId).select('_id');
     if (!category) {
@@ -94,8 +95,15 @@ export const getPostsByCategory = async (req, res) => {
     const posts = await Post.find({
       category: categoryId,
       status: 'published',
-    }).limit(5);
-    res.json(posts);
+    }).limit(limit);
+
+    // return total posts publised and match categoryId
+    const totalPosts = await Post.countDocuments({
+      category: categoryId,
+      status: 'published',
+    });
+
+    res.json({ posts, totalPosts });
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve posts' });
   }
@@ -104,10 +112,15 @@ export const getPostsByCategory = async (req, res) => {
 // get 5 newest posts
 export const getNewestPosts = async (req, res) => {
   try {
+    const limit = Number(req.query.limit) || 5;
     const posts = await Post.find({ status: 'published' })
       .sort({ createdAt: -1 })
-      .limit(5);
-    res.json(posts);
+      .limit(limit);
+
+    // return total posts
+    const totalPosts = await Post.countDocuments({ status: 'published' });
+
+    res.json({ posts, totalPosts });
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve posts' });
   }

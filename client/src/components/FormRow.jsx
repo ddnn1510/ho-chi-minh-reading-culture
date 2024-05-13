@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const FormRow = ({
   type,
   name,
@@ -5,6 +6,7 @@ const FormRow = ({
   defaultValue,
   onChange,
   required = true,
+  placeholder = '',
 }) => {
   return (
     <div className="form-row">
@@ -18,6 +20,7 @@ const FormRow = ({
         name={name}
         className="form-input"
         defaultValue={defaultValue || ''}
+        placeholder={placeholder}
         required
         onChange={onChange}
       />

@@ -37,6 +37,7 @@ const SearchContainer = () => {
             name="search"
             labelText={'Tìm kiếm'}
             defaultValue={search}
+            placeholder="Tìm kiếm bài viết..."
             required={false}
             onChange={debounce((form) => {
               submit(form);

@@ -8,6 +8,7 @@ const FormRowSelect = ({
   defaultValue = '',
   onChange,
   required = true,
+  placeholder = '',
 }) => {
   return (
     <div className="form-row">
@@ -19,7 +20,8 @@ const FormRowSelect = ({
         id={name}
         name={name}
         className="form-select"
-        defaultValue={isEnumList ? defaultValue : list[0]}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
         onChange={onChange}
       >
         {list.map((itemValue) => {
@@ -29,7 +31,9 @@ const FormRowSelect = ({
             </option>
           ) : (
             <option key={itemValue._id} value={itemValue._id}>
-              {itemValue.name}
+              {itemValue.status === 'draft'
+                ? itemValue.name + ' (Draft)'
+                : itemValue.name}
             </option>
           );
         })}

@@ -1,13 +1,18 @@
+/* eslint-disable react/prop-types */
 import { Link, useParams } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Sidebar';
 import customFetch from '../utils/customFetch';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 const fetchNewestPosts = async ({ queryKey }) => {
   const [, { limit }] = queryKey;
 
   const { data } = await customFetch.get(`/posts/newest?limit=${limit}`);
-  return data;
+  return {
+    posts: data.posts,
+    total: data.totalPosts,
+  };
 };
 
 const fetchRelatedPosts = async ({ queryKey }) => {
@@ -16,34 +21,63 @@ const fetchRelatedPosts = async ({ queryKey }) => {
   const { data } = await customFetch.get(
     `/posts/category/${categoryId}?limit=${limit}`
   );
-  return data;
+  return {
+    posts: data.posts,
+    total: data.totalPosts,
+  };
 };
 
 const Sidebar = ({ categoryId }) => {
-  const { categoryId: categoryIdParam } = useParams();
+  const { categoryId: categoryIdParam, postId } = useParams();
+
+  const [limitNewest, setLimitNewest] = useState(5);
+  const [limitRelated, setLimitRelated] = useState(5);
 
   categoryId = categoryId || categoryIdParam;
 
-  const { data: relatedPosts } = categoryId
-    ? useQuery({
-        queryKey: ['relatedPosts', { categoryId, limit: 5 }],
-        queryFn: fetchRelatedPosts,
-      })
-    : [];
+  const { data: relatedPostsData } = useQuery({
+    queryKey: ['relatedPosts', { categoryId, limit: limitRelated }],
+    queryFn: fetchRelatedPosts,
+    enabled: !!categoryId,
+  });
 
-  const { data: newestPosts } = categoryId
-    ? useQuery({
-        queryKey: ['newestPosts', { limit: 5 }],
-        queryFn: fetchNewestPosts,
-      })
-    : [];
+  const { posts: relatedPosts, total: relatedPostsTotal } = relatedPostsData
+    ? !postId
+      ? relatedPostsData
+      : {
+          posts: relatedPostsData.posts.filter((item) => item._id !== postId),
+          total:
+            relatedPostsData.total -
+            relatedPostsData.posts.filter((item) => item._id === postId).length,
+        }
+    : {
+        posts: [],
+        total: 0,
+      };
 
-  const handleViewMoreNewest = () => {};
+  const { data: newestPostsData } = useQuery({
+    queryKey: ['newestPosts', { limit: limitNewest }],
+    queryFn: fetchNewestPosts,
+    enabled: !!categoryId,
+  });
+
+  const { posts: newestPosts, total: newestPostsTotal } = newestPostsData || {
+    posts: [],
+    total: 0,
+  };
+
+  const handleViewMoreNewest = () => {
+    setLimitNewest((prevLimit) => prevLimit + 5);
+  };
+
+  const handleViewMoreRelated = () => {
+    setLimitRelated((prevLimit) => prevLimit + 5);
+  };
 
   return (
     <Wrapper>
       <div className="widget">
-        <div className="widget-title">Bài viết cùng mục</div>
+        <div className="widget-title">Bài viết cùng mục khác</div>
         <div className="widget-list">
           {relatedPosts && relatedPosts.length !== 0 ? (
             <>
@@ -55,9 +89,11 @@ const Sidebar = ({ categoryId }) => {
                   </Link>
                 </div>
               ))}
-              <Link to="" className="view-more">
-                Xem thêm
-              </Link>
+              {relatedPostsTotal > relatedPosts.length && (
+                <Link className="view-more" onClick={handleViewMoreRelated}>
+                  Xem thêm
+                </Link>
+              )}
             </>
           ) : (
             <div className="widget-empty">Không có bài viết nào</div>
@@ -77,9 +113,11 @@ const Sidebar = ({ categoryId }) => {
                   </Link>
                 </div>
               ))}
-              <Link to="" className="view-more">
-                Xem thêm
-              </Link>
+              {newestPostsTotal > newestPosts.length && (
+                <Link className="view-more" onClick={handleViewMoreNewest}>
+                  Xem thêm
+                </Link>
+              )}
             </>
           ) : (
             <div className="widget-empty">Không có bài viết nào</div>

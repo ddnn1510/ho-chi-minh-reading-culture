@@ -1,9 +1,9 @@
 import {
   Form,
-  redirect,
   useLoaderData,
   useNavigate,
   useNavigation,
+  useParams,
 } from 'react-router-dom';
 import Wrapper from '../../assets/wrappers/admin/AdminFormPage';
 import { FormRow, FormRowSelect } from '../../components';
@@ -14,22 +14,38 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useQueryClient } from '@tanstack/react-query';
 
-export const loader = async () => {
+export const postLoader = async (id, navigate) => {
   try {
-    const { data } = await customFetch.get('/categories');
-    return { categories: data };
+    const { data } = await customFetch.get(`/posts/${id}`);
+    return { data };
   } catch (error) {
     toast.error(error?.response?.data?.msg);
-    return redirect('/');
+    return navigate('/');
   }
 };
 
-const AddPost = () => {
+export const categoryLoader = async (navigate) => {
+  try {
+    const { data } = await customFetch.get('/categories');
+    return data;
+  } catch (error) {
+    toast.error(error?.response?.data?.msg);
+    return navigate('/');
+  }
+};
+
+const EditPost = () => {
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isSubmitting = navigation.state === 'submitting';
   const [editorContent, setEditorContent] = useState('');
-  const { categories } = useLoaderData();
+
+  const { postId } = useParams();
+  const { post, categories } = useLoaderData(
+    postLoader(postId, navigate),
+    categoryLoader(navigate)
+  );
+
   const queryClient = useQueryClient();
 
   const handleSubmit = async (event) => {
@@ -48,9 +64,9 @@ const AddPost = () => {
     }
 
     try {
-      await customFetch.post('/posts', data);
+      await customFetch.put(`/posts/${postId}`, data);
       await queryClient.invalidateQueries(['posts']);
-      toast.success('Bài viết đã được tạo thành công');
+      toast.success('Bài viết đã được chỉnh sửa thành công');
 
       return navigate('/admin/posts');
     } catch (error) {
@@ -61,31 +77,33 @@ const AddPost = () => {
   return (
     <Wrapper>
       <Form method="post" className="form" onSubmit={handleSubmit}>
-        <h4 className="form-title">Tạo mới bài viết</h4>
+        <h4 className="form-title">Chỉnh sửa bài viết</h4>
         <div className="form-center">
           <FormRowSelect
             name="category"
             labelText="Phân loại"
             list={categories}
             isEnumList={false}
+            defaultValue={post.data.category._id}
           />
           <FormRow
             type="text"
             name="title"
             labelText="Tiêu đề"
-            placeholder="Nhập tiêu đề bài viết vào đây..."
+            defaultValue={post.data.title}
           />
           <CustomEditor
             name="content"
             labelText="Nội dung"
             setEditorContent={setEditorContent}
+            defaultValue={post ? post.data.content : ''}
           />
           <FormRowSelect
             name="status"
             labelText="Trạng thái"
             list={Object.values(POST_STATUS)}
             titleList={TITLE_OF_POST_STATUS}
-            defaultValue={POST_STATUS.DRAFT}
+            defaultValue={post ? post.data.status : POST_STATUS.DRAFT}
             isEnumList={true}
           />
           <div className="form-btn-container">
@@ -109,4 +127,4 @@ const AddPost = () => {
     </Wrapper>
   );
 };
-export default AddPost;
+export default EditPost;

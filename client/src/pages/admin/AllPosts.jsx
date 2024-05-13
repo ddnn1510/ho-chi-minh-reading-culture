@@ -9,7 +9,7 @@ const allPostsQuery = (params) => {
   const { search, postStatus, category, sort, page } = params;
   return {
     queryKey: [
-      'jobs',
+      'posts',
       search ?? '',
       postStatus ?? 'all',
       category ?? 'all',

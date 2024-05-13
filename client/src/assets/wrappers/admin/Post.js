@@ -61,6 +61,12 @@ const Wrapper = styled.article`
     display: grid;
     align-items: center;
   }
+  .status.published {
+    background-color: #bfdbfe;
+  }
+  .status.draft {
+    background-color: #fef08a;
+  }
   .actions {
     margin-top: 1rem;
     display: flex;

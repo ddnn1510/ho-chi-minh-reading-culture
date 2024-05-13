@@ -39,10 +39,10 @@ const Wrapper = styled.section`
   .form-btn {
     flex: 1;
     margin-top: 1rem;
+  }
 
-    &:disabled {
-      background-color: var(--grey-400);
-    }
+  .form-btn.btn-cancel {
+    background-color: var(--grey-400);
   }
 `;
 

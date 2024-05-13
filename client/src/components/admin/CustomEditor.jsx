@@ -11,7 +11,7 @@ const CustomEditor = ({
   setEditorContent,
   required = true,
 }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(defaultValue);
   const quill = useRef();
 
   const imageHandler = useCallback(() => {
@@ -43,35 +43,6 @@ const CustomEditor = ({
     };
   }, []);
 
-  const videoHandler = useCallback(() => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'video/*');
-    input.click();
-    input.onchange = async () => {
-      if (input !== null && input.files !== null) {
-        const file = input.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'ml_default');
-        const res = await fetch(
-          'https://api.cloudinary.com/v1_1/djnmieevk/video/upload',
-          {
-            method: 'POST',
-            body: formData,
-          }
-        );
-        const data = await res.json();
-
-        if (quill.current) {
-          const editor = quill.current.getEditor();
-          const range = editor.getSelection();
-          range && editor.insertEmbed(range.index, 'video', data.url);
-        }
-      }
-    };
-  }, []);
-
   const modules = {
     toolbar: {
       container: [
@@ -95,7 +66,6 @@ const CustomEditor = ({
       ],
       handlers: {
         image: imageHandler,
-        video: videoHandler,
       },
     },
     clipboard: {
@@ -137,6 +107,7 @@ const CustomEditor = ({
           setValue(value);
           setEditorContent(value);
         }}
+        placeholder="Nhập nội dung bài viết vào đây..."
       />
     </div>
   );
