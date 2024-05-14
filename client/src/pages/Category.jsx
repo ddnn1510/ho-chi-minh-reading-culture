@@ -13,11 +13,7 @@ const fetchCategoryById = async (id) => {
 const Category = () => {
   const { categoryId } = useParams();
 
-  const {
-    data: category,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['category', categoryId],
     queryFn: () => fetchCategoryById(categoryId),
   });
@@ -25,8 +21,8 @@ const Category = () => {
   const { setCategoryName } = useOutletContext();
 
   useEffect(() => {
-    setCategoryName(category?.name || '');
-  }, [category]);
+    setCategoryName(data?.category?.name || '');
+  }, [data]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -39,16 +35,16 @@ const Category = () => {
   return (
     <Wrapper>
       <article>
-        {category && category?.content?.trim() ? (
+        {data?.category && data?.category?.content?.trim() ? (
           <div
-            dangerouslySetInnerHTML={{ __html: category.content }}
+            dangerouslySetInnerHTML={{ __html: data.category.content }}
             className="ql-editor"
           />
         ) : (
-          category?.name
+          data?.category?.name
         )}
       </article>
-      <Sidebar></Sidebar>
+      <Sidebar qrCode={data?.qrCode}></Sidebar>
     </Wrapper>
   );
 };

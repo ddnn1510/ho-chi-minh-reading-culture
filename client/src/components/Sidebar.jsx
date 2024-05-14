@@ -27,7 +27,7 @@ const fetchRelatedPosts = async ({ queryKey }) => {
   };
 };
 
-const Sidebar = ({ categoryId }) => {
+const Sidebar = ({ categoryId, qrCode }) => {
   const { categoryId: categoryIdParam, postId } = useParams();
 
   const [limitNewest, setLimitNewest] = useState(5);
@@ -128,7 +128,7 @@ const Sidebar = ({ categoryId }) => {
         <div className="widget-title">Quét QR bài viết</div>
         <img
           className="qr-code"
-          src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+          src={qrCode ? qrCode : null}
           alt="category qr"
         />
       </div>
