@@ -27,6 +27,7 @@ export const loader = (queryClient) => async () => {
   } catch (error) {
     console.log('error', error);
     toast.error('Please login to continue');
+    return null;
     // return redirect('/login');
   }
 };
@@ -42,7 +43,7 @@ const HomeLayout = () => {
     queryFn: fetchCategories,
   });
 
-  const { user } = useQuery(userQuery).data;
+  const user = useQuery(userQuery)?.data?.user;
 
   const [categoryName, setCategoryName] = useState();
 
