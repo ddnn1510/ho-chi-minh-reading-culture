@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Outlet } from 'react-router-dom';
-import { Header, Footer } from '../components';
+import { Header, Footer, GoTop } from '../components';
 import Wrapper from '../assets/wrappers/HomeLayout';
 import { createContext, useContext, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -33,6 +33,7 @@ const HomeLayout = () => {
           <Outlet context={{ setCategoryName }} />
         </main>
         <Footer />
+        <GoTop />
       </Wrapper>
     </CategoriesContext.Provider>
   );

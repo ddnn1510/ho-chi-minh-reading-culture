@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Wrapper from '../assets/wrappers/TopNav';
 import { NavLink } from 'react-router-dom';
 import logoSchool from '../assets/images/logo-school.svg';
