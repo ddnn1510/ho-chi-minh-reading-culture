@@ -1,10 +1,10 @@
 import Wrapper from '../assets/wrappers/Header';
 import bannerImg from '../assets/images/banner.png';
 import TopNav from './TopNav';
-import { useCategories } from '../pages/HomeLayout';
+import { useHomeLayoutContext } from '../pages/HomeLayout';
 
 const Header = () => {
-  const { data: categoryList, isLoading, isError } = useCategories();
+  const { data: categoryList, isLoading, isError } = useHomeLayoutContext();
   if (isLoading) {
     // return <div>Loading...</div>;
   }
