@@ -1,6 +1,7 @@
 import Post from '../models/PostModel.js';
 import Category from '../models/CategoryModel.js';
 import { StatusCodes } from 'http-status-codes';
+import QRCode from 'qrcode';
 
 export const createPost = async (req, res) => {
   try {
@@ -76,7 +77,9 @@ export const getPost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    res.status(200).json(post);
+
+    const qrCode = await generateQRCode(postId);
+    res.status(200).json({ post, qrCode });
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve post' });
   }
@@ -162,5 +165,16 @@ export const deletePost = async (req, res) => {
     res.json({ message: 'Post deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete post' });
+  }
+};
+
+// function to generate QR code of post
+const generateQRCode = async (postId) => {
+  try {
+    const url = `${process.env.BASE_URL}/post/${postId}`;
+    const qrCode = await QRCode.toDataURL(url);
+    return qrCode;
+  } catch (error) {
+    console.log({ error: 'Failed to generate QR code' });
   }
 };
