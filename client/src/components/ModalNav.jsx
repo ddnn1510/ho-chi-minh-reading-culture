@@ -1,8 +1,8 @@
 import { FaCaretDown, FaTimes } from 'react-icons/fa';
 import Wrapper from '../assets/wrappers/ModalNav';
 import { NavLink } from 'react-router-dom';
-import { categoryLinks } from '../utils/links';
 import { useState } from 'react';
+import { useHomeLayoutContext } from '../pages/HomeLayout';
 
 const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -15,6 +15,8 @@ const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
     toggleNavbar();
     setShowDropdown(false);
   };
+
+  const { currentUserData } = useHomeLayoutContext();
 
   return (
     <Wrapper>

@@ -13,7 +13,6 @@ import categoryRouter from './routes/categoryRouter.js';
 import userRouter from './routes/userRouter.js';
 
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
-import { authenticateUser } from './middleware/authMiddleware.js';
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -27,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', authenticateUser, userRouter);
+app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/categories', categoryRouter);
 

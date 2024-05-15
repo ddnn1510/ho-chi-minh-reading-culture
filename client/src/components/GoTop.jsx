@@ -8,7 +8,6 @@ const GoTop = () => {
 
   const handleVisibleButton = () => {
     setShowGoTop(window.pageYOffset > 100);
-    console.log(window.pageYOffset);
   };
 
   const handleScrollUp = () => {
