@@ -12,7 +12,9 @@ export const action =
     const data = Object.fromEntries(formData);
     try {
       await customFetch.post('/auth/login', data);
-      queryClient.invalidateQueries();
+      queryClient.refetchQueries({
+        queryKey: ['current-user'],
+      });
       toast.success('Login successful');
       return redirect('/');
     } catch (error) {

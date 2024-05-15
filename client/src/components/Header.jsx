@@ -4,17 +4,11 @@ import TopNav from './TopNav';
 import { useHomeLayoutContext } from '../pages/HomeLayout';
 
 const Header = () => {
-  const { data: categoryList, isLoading, isError } = useHomeLayoutContext();
-  if (isLoading) {
-    // return <div>Loading...</div>;
-  }
+  const { categoriesList } = useHomeLayoutContext();
 
-  if (isError) {
-    return <div>Error loading categories</div>;
-  }
   return (
     <Wrapper>
-      <TopNav categoryList={categoryList || []} />
+      <TopNav categoryList={categoriesList} />
       <div className="banner-container">
         <div className="banner">
           <img src={bannerImg} alt="banner" className="banner-img" />
