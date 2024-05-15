@@ -1,9 +1,25 @@
 /* eslint-disable react/no-unescaped-entities */
+import { useOutletContext } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/LandingPage';
-import { useHomeLayoutContext } from './HomeLayout';
+import { useCategories } from './HomeLayout';
+import { useEffect } from 'react';
 
 const Landing = () => {
-  const { categoriesList } = useHomeLayoutContext();
+  const { data: categoryList, isLoading, isError } = useCategories();
+
+  const { setCategoryName } = useOutletContext();
+
+  useEffect(() => {
+    setCategoryName('Giới thiệu');
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading categories</div>;
+  }
 
   return (
     <Wrapper>
@@ -58,12 +74,12 @@ const Landing = () => {
       <section className="category-list-section">
         <h4 className="text-center font-bold">Danh mục bài viết</h4>
         <div className="category-list">
-          {categoriesList.map((category, index) => (
+          {categoryList.map((category, index) => (
             <div className="category-item" key={index}>
               <img className="category-img" src={category.intro_image} />
               <div className="category-content">
                 <div className="category-title">
-                  {index + 1}. {category.name}
+                  {index + 1}: {category.name}
                 </div>
                 <div className="category-description">{category.intro}</div>
               </div>

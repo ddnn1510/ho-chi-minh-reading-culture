@@ -267,14 +267,6 @@ button:disabled {
   margin-bottom: 1.5rem;
 }
 
-.form-icon {
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-40%);
-  cursor: pointer;
-}
-
 .form-textarea {
   height: 7rem;
 }

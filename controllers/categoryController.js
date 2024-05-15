@@ -1,5 +1,4 @@
 import Category from '../models/CategoryModel.js';
-import QRCode from 'qrcode';
 
 export const createCategory = async (req, res) => {
   try {
@@ -55,9 +54,7 @@ export const getCategoryById = async (req, res) => {
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
-
-    const qrCode = await generateQRCode(categoryId);
-    res.json({ category, qrCode });
+    res.json(category);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve category' });
   }
@@ -91,15 +88,5 @@ export const deleteCategory = async (req, res) => {
     res.json({ message: 'Category deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete category' });
-  }
-};
-
-const generateQRCode = async (categoryId) => {
-  try {
-    const url = `${process.env.BASE_URL}/category/${categoryId}`;
-    const qrCode = await QRCode.toDataURL(url);
-    return qrCode;
-  } catch (error) {
-    console.log({ error: 'Failed to generate QR code' });
   }
 };
