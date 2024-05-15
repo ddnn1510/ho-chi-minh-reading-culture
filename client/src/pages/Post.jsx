@@ -13,11 +13,7 @@ const fetchPostById = async (id) => {
 const Post = () => {
   const { postId } = useParams();
 
-  const {
-    data: post,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['post', postId],
     queryFn: () => fetchPostById(postId),
   });
@@ -25,8 +21,8 @@ const Post = () => {
   const { setCategoryName } = useOutletContext();
 
   useEffect(() => {
-    setCategoryName(post?.category?.name || '');
-  }, [post]);
+    setCategoryName(data?.post?.category?.name || '');
+  }, [data]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -39,16 +35,16 @@ const Post = () => {
   return (
     <Wrapper>
       <article>
-        {post && post?.content ? (
+        {data && data?.post?.content ? (
           <div
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: data.post.content }}
             className="ql-editor"
           />
         ) : (
-          post?.title
+          data?.post?.title
         )}
       </article>
-      <Sidebar categoryId={post?.category?._id} />
+      <Sidebar categoryId={data?.post?.category?._id} qrCode={data?.qrCode} />
     </Wrapper>
   );
 };

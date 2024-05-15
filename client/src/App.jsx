@@ -18,6 +18,8 @@ import { loader as allPostsLoader } from './pages/admin/AllPosts';
 import { loader as addPostLoader } from './pages/admin/AddPost';
 import { action as deletePostAction } from './pages/admin/DeletePost';
 import { postLoader, categoryLoader } from './pages/admin/EditPost';
+import { loader as HomeLayoutLoader } from './pages/HomeLayout';
+import { loader as categoryDetailLoader } from './pages/Category';
 
 import {
   AdminAddPost,
@@ -39,6 +41,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <HomeLayout />,
     errorElement: <Error />,
+    loader: HomeLayoutLoader(queryClient),
     children: [
       {
         index: true,
@@ -47,6 +50,7 @@ const router = createBrowserRouter([
       {
         path: 'category/:categoryId',
         element: <Category />,
+        loader: categoryDetailLoader(queryClient),
       },
       {
         path: 'post/:postId',

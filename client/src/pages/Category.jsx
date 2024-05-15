@@ -1,54 +1,65 @@
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useLoaderData, useOutletContext, useParams } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Post';
 import { Sidebar } from '../components';
 import { useQuery } from '@tanstack/react-query';
 import customFetch from '../utils/customFetch';
 import { useEffect } from 'react';
+import { useHomeLayoutContext } from './HomeLayout';
 
 const fetchCategoryById = async (id) => {
   const { data } = await customFetch.get(`/categories/${id}`);
   return data;
 };
 
+const categoryQuery = (id) => {
+  return {
+    queryKey: ['category', id],
+    queryFn: async () => {
+      const { data } = await customFetch.get(`/categories/${id}`);
+      return data;
+    },
+  };
+};
+
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    try {
+      await queryClient.ensureQueryData(categoryQuery(params.categoryId));
+      return params.categoryId;
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+      return redirect('/');
+    }
+  };
+
 const Category = () => {
-  const { categoryId } = useParams();
+  const id = useLoaderData();
 
-  const {
-    data: category,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['category', categoryId],
-    queryFn: () => fetchCategoryById(categoryId),
-  });
+  const { data } = useQuery(categoryQuery(id));
 
-  const { setCategoryName } = useOutletContext();
+  const { setCategoryName } = useHomeLayoutContext();
 
   useEffect(() => {
-    setCategoryName(category?.name || '');
-  }, [category]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading category</div>;
-  }
+    setCategoryName(data.category.name);
+    return () => {
+      setCategoryName(null);
+    };
+  }, [id]);
 
   return (
     <Wrapper>
       <article>
-        {category && category?.content?.trim() ? (
+        {data?.category && data?.category?.content?.trim() ? (
           <div
-            dangerouslySetInnerHTML={{ __html: category.content }}
+            dangerouslySetInnerHTML={{ __html: data.category.content }}
             className="ql-editor"
           />
         ) : (
-          category?.name
+          data?.category?.name
         )}
       </article>
-      <Sidebar></Sidebar>
+      <Sidebar qrCode={data?.qrCode}></Sidebar>
     </Wrapper>
   );
 };
