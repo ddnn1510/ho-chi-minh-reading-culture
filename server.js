@@ -11,6 +11,7 @@ import authRouter from './routes/authRouter.js';
 import postRouter from './routes/postRouter.js';
 import categoryRouter from './routes/categoryRouter.js';
 import userRouter from './routes/userRouter.js';
+import questionRouter from './routes/questionRouter.js';
 
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 
@@ -29,6 +30,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/categories', categoryRouter);
+app.use('/api/v1/questions', questionRouter);
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });
