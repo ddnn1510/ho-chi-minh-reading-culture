@@ -9,6 +9,10 @@ const questionSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  extend: {
+    type: String,
+    required: false,
+  },
   correct: {
     type: Number,
     required: true,

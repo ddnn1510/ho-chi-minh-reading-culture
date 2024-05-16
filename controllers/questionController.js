@@ -9,7 +9,7 @@ const auth = new google.auth.GoogleAuth({
 export const importQuestions = async (req, res) => {
   try {
     const data = await readGoogleDocs(
-      '12OdorWeyvDS1W1f7jomaKMng9OnkZl-QeLfwlYrrEaA'
+      '1H6OJHsK_yQd5ESqsH_yuaYzO_doW4K6e_00I4g63s60'
     );
 
     let questionsData = extractTextRuns(data.body.content);
@@ -17,9 +17,11 @@ export const importQuestions = async (req, res) => {
       (object) => object.content.trim() !== ''
     );
     questionsData = questionsData.map((run) => {
-      // let content = run.content.replace(/^\s*[A-D]\.\s*|\d+\.\s*/, '');
-      let content = run.content.replace(/^\s*[A-D][.)]\s*|\d+[.)]\s*/, '');
-      let type = /^\s*\d+\./.test(run.content) ? 'question' : 'answer';
+      let content = run.content.replace(/^\s*[a-d][.)]\s*|\d+[.)]\s*/, '');
+      let type = content.startsWith('Câu') ? 'question' : 'answer';
+      if (type === 'question') {
+        run.isAnswer = false;
+      }
       return { type, content, isAnswer: run.isAnswer };
     });
 
@@ -27,23 +29,34 @@ export const importQuestions = async (req, res) => {
     let currentQuestion = null;
     questionsData.forEach((item) => {
       if (item.type === 'question') {
+        let content = item.content.replace(/^\s*[a-d][.)]\s*/, '').trim();
+        content = content.replace(
+          /^\s*Câu \d+[:.]\s*|[a-d][.)]\s*|\d+[.)]\s*/,
+          ''
+        );
         currentQuestion = {
-          question: item.content,
+          question: content,
           answers: [],
           correct: null,
         };
         questions.push(currentQuestion);
       } else if (item.type === 'answer' && item.content.trim() !== '') {
-        currentQuestion.answers.push(item.content);
+        currentQuestion.answers.push(
+          item.content.replace(/^\s*[a-d][.)]\s*/, '').trim()
+        );
         if (item.isAnswer) {
           currentQuestion.correct = currentQuestion.answers.length - 1;
         }
       }
     });
 
+    let filteredQuestions = questions.filter(
+      (question) => question.answers.length !== 4
+    );
+
     await Question.insertMany(questions);
 
-    res.status(200).json(questions);
+    res.status(200).json(filteredQuestions);
   } catch (error) {
     console.log(error.message);
     res
@@ -70,13 +83,13 @@ function extractTextRuns(obj) {
 
 async function readGoogleDocs(documentId) {
   try {
-    const docs = google.docs({ version: 'v1', auth }); // Create a Google Docs API client
+    const docs = google.docs({ version: 'v1', auth });
 
-    // Retrieve the document content
-    const response = await docs.documents.get({ documentId }); // ID of the document to read
-    return response.data; // Return the document data
+    const response = await docs.documents.get({ documentId });
+
+    return response.data;
   } catch (error) {
-    console.error('error', error); // Log any errors that occur
+    console.error('error', error);
   }
 }
 
@@ -84,7 +97,13 @@ export const getListQuestions = async (req, res) => {
   try {
     const questions = await Question.aggregate([{ $sample: { size: 30 } }]);
     questions.forEach((question) => {
+      const correctAnswer = question.answers[question.correct];
+
       question.answers.sort(() => Math.random() - 0.5);
+
+      const newCorrectIndex = question.answers.indexOf(correctAnswer);
+
+      question.correct = newCorrectIndex;
     });
     res.status(200).json(questions);
   } catch (error) {
