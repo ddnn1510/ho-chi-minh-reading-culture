@@ -141,10 +141,6 @@ const Wrapper = styled.div`
       display: flex;
       flex-direction: column;
 
-      .title-note {
-        font-size: 14px;
-      }
-
       .answer-item {
         display: block;
         position: relative;

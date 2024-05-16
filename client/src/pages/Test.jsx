@@ -111,9 +111,7 @@ const Test = () => {
           )}
           <hr />
           <div className="question-answers flex flex-col">
-            <div className="title-note font-semibold">
-              Chọn đáp án đúng nhất cho câu hỏi
-            </div>
+            <div className="title-note font-semibold">Chọn đáp án đúng:</div>
             <div className="answer-group flex flex-col">
               {currentQuestion.answers.map((answer, index) => (
                 <label className="answer-item" key={index}>
