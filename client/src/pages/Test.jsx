@@ -1,6 +1,7 @@
 import Wrapper from '../assets/wrappers/Test';
 import questionsList from '../../../utils/mockData.json';
 import { useEffect, useState } from 'react';
+import { FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa6';
 
 const Test = () => {
   const questions = questionsList.map((item, index) => ({ ...item, index }));
@@ -16,12 +17,17 @@ const Test = () => {
 
   useEffect(() => {
     const startTime = getCurrentTimestamp() / 1000;
-    console.log(Date.now());
 
     setTimeLeft(startTime + 30 * 60 - Date.now() / 1000);
 
     const timer = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      setTimeLeft((prevTimeLeft) => {
+        if (prevTimeLeft <= 1) {
+          clearInterval(timer);
+          handleSubmit();
+        }
+        return prevTimeLeft - 1;
+      });
     }, 1000);
 
     return () => clearInterval(timer);
@@ -56,7 +62,7 @@ const Test = () => {
   };
 
   const handleSubmit = () => {
-    console.log('submit', answers);
+    // console.log('submit', answers);
   };
 
   return (
@@ -68,7 +74,11 @@ const Test = () => {
               Danh sách câu hỏi
             </div>
             {/* <div className="list-title mobile font-bold">Thời gian còn lại</div> */}
-            <div className="countdown-test">
+            <div
+              className={`countdown-test ${
+                timeLeft <= 5 * 60 ? 'red' : 'yellow'
+              }`}
+            >
               {Math.floor(timeLeft / 60)}:
               {('0' + Math.floor(timeLeft % 60)).slice(-2)}
             </div>
@@ -123,13 +133,16 @@ const Test = () => {
           <div className="action-container flex items-center justify-between">
             <div className="flex justify-between">
               <button className="btn btn-prev btn-gray" onClick={handlePrev}>
+                <FaAngleLeft />
                 Câu trước
               </button>
               <button className="btn btn-next" onClick={handleNext}>
                 Câu sau
+                <FaAngleRight />
               </button>
             </div>
             <button className="btn btn-submit btn-white" onClick={handleSubmit}>
+              <FaCheck />
               Nộp bài
             </button>
           </div>
