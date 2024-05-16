@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import { FaCaretDown, FaTimes } from 'react-icons/fa';
 import Wrapper from '../assets/wrappers/ModalNav';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useHomeLayoutContext } from '../pages/HomeLayout';
 
-const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
+const ModalNav = ({ categoriesList, showNavbar, toggleNavbar }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
@@ -40,7 +41,7 @@ const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
                 <FaCaretDown />
               </button>
               <div className="dropdown-content">
-                {categoryList.map((item) => {
+                {categoriesList?.map((item) => {
                   const { _id, name } = item;
                   return (
                     <NavLink

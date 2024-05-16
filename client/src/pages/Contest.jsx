@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useHomeLayoutContext } from './HomeLayout';
 
 const Contest = () => {
-  const { setCategoryName } = useOutletContext();
+  const { setCategoryName } = useHomeLayoutContext();
 
   useEffect(() => {
     setCategoryName(

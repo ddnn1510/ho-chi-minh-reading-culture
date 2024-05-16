@@ -6,7 +6,7 @@ import { FaBars, FaCaretDown } from 'react-icons/fa';
 import { useState } from 'react';
 import ModalNav from './ModalNav';
 
-const TopNav = ({ categoryList }) => {
+const TopNav = ({ categoriesList }) => {
   const [showNavbar, setShowNavbar] = useState(false);
   const toggleNavbar = () => {
     setShowNavbar(!showNavbar);
@@ -33,7 +33,7 @@ const TopNav = ({ categoryList }) => {
               <FaCaretDown />
             </button>
             <div className="dropdown-content">
-              {categoryList.map((item) => {
+              {categoriesList?.map((item) => {
                 const { _id, name } = item;
                 return (
                   <NavLink
@@ -58,7 +58,7 @@ const TopNav = ({ categoryList }) => {
         </div>
       </div>
       <ModalNav
-        categoryList={categoryList}
+        categoriesList={categoriesList}
         showNavbar={showNavbar}
         toggleNavbar={toggleNavbar}
       />

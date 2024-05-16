@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   .go-top-hidden {
-    display: block;
+    display: none;
   }
 
   .go-top {

@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Outlet, useLoaderData } from 'react-router-dom';
-import { Header, Footer, GoTop } from '../components';
+import { Outlet, useLoaderData, useLocation } from 'react-router-dom';
+import { Footer, GoTop, TopNav, HeroBanner } from '../components';
 import Wrapper from '../assets/wrappers/HomeLayout';
 import { createContext, useContext, useState } from 'react';
 import customFetch from '../utils/customFetch';
@@ -43,16 +43,23 @@ export const useHomeLayoutContext = () => {
 };
 const HomeLayout = () => {
   const { categoriesList, currentUserData } = useLoaderData();
-
+  const location = useLocation();
   const [categoryName, setCategoryName] = useState();
+
+  const isTestPage = location.pathname === '/test';
 
   return (
     <HomeLayoutContext.Provider
       value={{ categoriesList, currentUserData, setCategoryName }}
     >
       <Wrapper>
-        <Header />
-        <div className="category-name">{categoryName || 'Giới thiệu'}</div>
+        <TopNav categoriesList={categoriesList} />
+        {!isTestPage && (
+          <>
+            <HeroBanner />
+            <div className="category-name">{categoryName || 'Giới thiệu'}</div>
+          </>
+        )}
         <main>
           <Outlet />
         </main>

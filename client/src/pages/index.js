@@ -6,3 +6,4 @@ export { default as Error } from './Error';
 export { default as Contest } from './Contest';
 export { default as Category } from './Category';
 export { default as Post } from './Post';
+export { default as Test } from './Test';

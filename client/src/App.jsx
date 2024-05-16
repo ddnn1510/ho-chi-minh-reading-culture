@@ -8,6 +8,7 @@ import {
   Contest,
   Category,
   Post,
+  Test,
 } from './pages';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: 'contest',
         element: <Contest />,
+      },
+      {
+        path: 'test',
+        element: <Test />,
       },
     ],
   },
