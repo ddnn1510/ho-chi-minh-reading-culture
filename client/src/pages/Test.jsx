@@ -1,10 +1,49 @@
 import Wrapper from '../assets/wrappers/Test';
-import questionsList from '../../../utils/mockData.json';
 import { useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa6';
+import customFetch from '../utils/customFetch';
+import { toast } from 'react-toastify';
+import { redirect, useLoaderData } from 'react-router-dom';
+
+const testQuery = {
+  queryKey: ['test'],
+  queryFn: async () => {
+    const { data } = await customFetch.get('/questions');
+    return data;
+  },
+};
+
+const currentUserQuery = {
+  queryKey: ['current-user'],
+  queryFn: async () => {
+    const { data } = await customFetch.get('/users/current-user');
+    return data;
+  },
+};
+
+export const loader = (queryClient) => async () => {
+  try {
+    await queryClient.prefetchQuery(currentUserQuery);
+
+    // Now you can get the current user data
+    const user = queryClient.getQueryData(['current-user']);
+
+    console.log(user);
+
+    if (!user) {
+      return redirect('/login');
+    }
+
+    return await queryClient.ensureQueryData(testQuery);
+  } catch (error) {
+    return redirect('/');
+  }
+};
 
 const Test = () => {
-  const questions = questionsList.map((item, index) => ({ ...item, index }));
+  const test = useLoaderData();
+
+  const questions = test?.questions.map((item, index) => ({ ...item, index }));
   const [currentQuestion, setCurrentQuestion] = useState(questions[0]);
   const [answers, setAnswers] = useState(
     questions.map((item) => ({ question_id: item._id, answer: null }))
@@ -12,7 +51,8 @@ const Test = () => {
   const [timeLeft, setTimeLeft] = useState();
 
   const getCurrentTimestamp = () => {
-    return Date.now();
+    //cover startTime to timestamp
+    return Date.parse(test?.startTime);
   };
 
   useEffect(() => {
@@ -61,8 +101,18 @@ const Test = () => {
     );
   };
 
-  const handleSubmit = () => {
-    // console.log('submit', answers);
+  const handleSubmit = async () => {
+    console.log('submit', answers);
+    try {
+      const body = { testId: test?.testId, answers };
+      await customFetch.post('/tests/submit', body);
+      toast.success('Bạn đã nộp bài thành công');
+      // return redirect('/login');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+
+      return error;
+    }
   };
 
   return (

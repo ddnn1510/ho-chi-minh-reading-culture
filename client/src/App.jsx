@@ -21,6 +21,7 @@ import { action as deletePostAction } from './pages/admin/DeletePost';
 import { postLoader, categoryLoader } from './pages/admin/EditPost';
 import { loader as HomeLayoutLoader } from './pages/HomeLayout';
 import { loader as categoryDetailLoader } from './pages/Category';
+import { loader as testLoader } from './pages/Test';
 
 import {
   AdminAddPost,
@@ -64,6 +65,7 @@ const router = createBrowserRouter([
       {
         path: 'test',
         element: <Test />,
+        loader: testLoader(queryClient),
       },
     ],
   },

@@ -1,5 +1,6 @@
 import Question from '../models/QuestionModel.js';
 import { google } from 'googleapis';
+import Test from '../models/TestModel.js';
 
 const auth = new google.auth.GoogleAuth({
   keyFile: './utils/credentials.json',
@@ -95,6 +96,28 @@ async function readGoogleDocs(documentId) {
 
 export const getListQuestions = async (req, res) => {
   try {
+    const userId = req.user.userId;
+    let foundTest = await Test.find({ userId });
+    // check if user has taken the test with created at in last 30 minutes
+    if (foundTest.length > 0) {
+      const lastTest = foundTest[foundTest.length - 1];
+      const now = new Date();
+      const diff = now - lastTest.createdAt;
+      if (diff < 30 * 60 * 1000 && !lastTest.isSubmitted) {
+        //return lastTest questions without correct answer
+        lastTest.questions.forEach((question) => {
+          delete question.correct;
+          delete question.isCorrect;
+        });
+        return res.status(200).json({
+          questions: lastTest.questions,
+          testId: lastTest._id,
+          startTime: lastTest.createdAt,
+        });
+
+        // return res.status(200).json({ questions: lastTest.questions });
+      }
+    }
     const questions = await Question.aggregate([{ $sample: { size: 30 } }]);
     questions.forEach((question) => {
       const correctAnswer = question.answers[question.correct];
@@ -105,8 +128,20 @@ export const getListQuestions = async (req, res) => {
 
       question.correct = newCorrectIndex;
     });
-    res.status(200).json(questions);
+
+    const test = new Test({ questions, userId });
+    await test.save();
+
+    // do net return correct
+    questions.forEach((question) => {
+      delete question.correct;
+    });
+
+    res
+      .status(200)
+      .json({ questions, testId: test._id, startTime: test.createdAt });
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ error: 'Failed to retrieve questions' });
   }
 };

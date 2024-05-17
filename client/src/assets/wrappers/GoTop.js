@@ -23,6 +23,7 @@ const Wrapper = styled.div`
     border: none;
     text-align: center;
     cursor: pointer;
+    z-index: 1;
 
     &:hover {
       background-color: var(--primary-600);
