@@ -11,7 +11,7 @@
     "dev": "nodemon server.js",
     "watch": "node --watch server.js ",
     "server": "nodemon server",
-    "client": "cd client && npm run dev",
+    "client": "cd client && yarn dev",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {

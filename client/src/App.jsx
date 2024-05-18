@@ -22,12 +22,18 @@ import { postLoader, categoryLoader } from './pages/admin/EditPost';
 import { loader as HomeLayoutLoader } from './pages/HomeLayout';
 import { loader as categoryDetailLoader } from './pages/Category';
 import { loader as testLoader } from './pages/Test';
+import { loader as adminAllCategoriesLoader } from './pages/admin/AllCategories';
+import { action as deleteCategoryAction } from './pages/admin/DeleteCategory';
+import { loader as editCategoryLoader } from './pages/admin/EditCategory';
 
 import {
   AdminAddPost,
   AdminLayout,
   AdminAllPosts,
   AdminEditPost,
+  AdminAllCategories,
+  AdminAddCategory,
+  AdminEditCategory,
 } from './pages/admin';
 
 const queryClient = new QueryClient({
@@ -106,6 +112,24 @@ const router = createBrowserRouter([
         },
       },
       { path: 'delete-post/:id', action: deletePostAction(queryClient) },
+      {
+        path: 'categories',
+        element: <AdminAllCategories />,
+        loader: adminAllCategoriesLoader(queryClient),
+      },
+      {
+        path: 'add-category',
+        element: <AdminAddCategory />,
+      },
+      {
+        path: 'edit-category/:categoryId',
+        element: <AdminEditCategory />,
+        loader: editCategoryLoader(queryClient),
+      },
+      {
+        path: 'delete-category/:id',
+        action: deleteCategoryAction(queryClient),
+      },
     ],
   },
 ]);

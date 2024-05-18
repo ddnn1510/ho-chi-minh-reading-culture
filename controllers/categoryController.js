@@ -1,12 +1,12 @@
+import { StatusCodes } from 'http-status-codes';
 import Category from '../models/CategoryModel.js';
 import QRCode from 'qrcode';
 
 export const createCategory = async (req, res) => {
   try {
-    const { name, title, content, status, intro, intro_image } = req.body;
+    const { name, content, status, intro, intro_image } = req.body;
     const newCategory = new Category({
       name,
-      title,
       content,
       status,
       intro_image,
@@ -48,6 +48,49 @@ export const getCategories = async (req, res) => {
   }
 };
 
+export const getCategoriesFilter = async (req, res) => {
+  try {
+    const { search, status, category, sort } = req.query;
+
+    const queryObject = {};
+
+    if (search) {
+      queryObject.$or = [{ title: { $regex: search, $options: 'i' } }];
+    }
+
+    if (status && status !== 'all') {
+      queryObject.status = status;
+    }
+
+    const sortOptions = {
+      newest: '-createdAt',
+      oldest: 'createdAt',
+      'a-z': 'title',
+      'z-a': '-title',
+    };
+
+    const sortKey = sortOptions[sort] || sortOptions.newest;
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const categories = await Category.find(queryObject)
+      .collation({ locale: 'en' })
+      .sort(sortKey)
+      .skip(skip)
+      .limit(limit);
+    const totalCategories = await Category.countDocuments(queryObject);
+    const numOfPages = Math.ceil(totalCategories / limit);
+    res
+      .status(StatusCodes.OK)
+      .json({ totalCategories, numOfPages, currentPage: page, categories });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Failed to retrieve categories' });
+  }
+};
+
 export const getCategoryById = async (req, res) => {
   try {
     const categoryId = req.params.id;
@@ -66,10 +109,10 @@ export const getCategoryById = async (req, res) => {
 export const updateCategory = async (req, res) => {
   try {
     const categoryId = req.params.id;
-    const { name, title, content } = req.body;
+    const { name, content, intro, intro_image } = req.body;
     const updatedCategory = await Category.findByIdAndUpdate(
       categoryId,
-      { name, title, content },
+      { name, intro, content, intro_image },
       { new: true }
     );
     if (!updatedCategory) {

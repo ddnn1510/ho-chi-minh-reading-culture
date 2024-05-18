@@ -1,7 +1,7 @@
 import { useLoaderData } from 'react-router-dom';
 import customFetch from '../../utils/customFetch';
 import { useQuery } from '@tanstack/react-query';
-import SearchContainer from '../../components/admin/SearchContainter';
+import SearchContainer from '../../components/admin/SearchPostContainter';
 import { createContext, useContext, useEffect, useState } from 'react';
 import PostsContainer from '../../components/admin/PostsContainers';
 
