@@ -39,13 +39,7 @@ export const submitTest = async (req, res) => {
 
     await test.save();
 
-    // return test without correct answer
-    let testWithoutCorrect = JSON.parse(JSON.stringify(test));
-    testWithoutCorrect.questions.forEach((question) => {
-      delete question.correct;
-    });
-
-    res.status(200).json(testWithoutCorrect);
+    res.status(200).json(test);
   } catch (error) {
     console.log(error.message);
     res

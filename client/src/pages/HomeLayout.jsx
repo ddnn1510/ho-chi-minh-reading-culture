@@ -1,9 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Outlet, useLoaderData, useLocation } from 'react-router-dom';
+import {
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useNavigation,
+} from 'react-router-dom';
 import { Footer, GoTop, TopNav, HeroBanner } from '../components';
 import Wrapper from '../assets/wrappers/HomeLayout';
 import { createContext, useContext, useState } from 'react';
 import customFetch from '../utils/customFetch';
+import Loading from '../components/Loading';
 
 const categoriesQuery = {
   queryKey: ['categories'],
@@ -45,6 +51,8 @@ const HomeLayout = () => {
   const { categoriesList, currentUserData } = useLoaderData();
   const location = useLocation();
   const [categoryName, setCategoryName] = useState();
+  const navigation = useNavigation();
+  const isPageLoading = navigation.state === 'loading';
 
   const isTestPage = location.pathname === '/test';
 
@@ -60,9 +68,7 @@ const HomeLayout = () => {
             <div className="category-name">{categoryName || 'Giới thiệu'}</div>
           </>
         )}
-        <main>
-          <Outlet />
-        </main>
+        <main>{isPageLoading ? <Loading /> : <Outlet />}</main>
         <Footer />
         <GoTop />
       </Wrapper>
