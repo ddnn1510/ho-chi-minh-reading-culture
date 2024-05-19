@@ -3,7 +3,13 @@ import Wrapper from '../assets/wrappers/LandingPage';
 import { useHomeLayoutContext } from './HomeLayout';
 
 const Landing = () => {
-  const { categoriesList } = useHomeLayoutContext();
+  const homeLayoutContext = useHomeLayoutContext();
+
+  if (!homeLayoutContext) {
+    // Handle the case where homeLayoutContext is undefined
+    return null; // Or return a loading spinner, or throw an error, etc.
+  }
+  const { categoriesList } = homeLayoutContext;
 
   return (
     <Wrapper>

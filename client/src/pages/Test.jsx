@@ -31,6 +31,7 @@ export const loader = (queryClient) => async () => {
     const data = queryClient.getQueryData(['current-user']);
 
     if (!data || !data.user) {
+      await queryClient.setQueryData('previous-page', '/contest');
       return redirect('/login');
     }
 

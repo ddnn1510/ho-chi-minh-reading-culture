@@ -25,6 +25,8 @@ import { loader as testLoader } from './pages/Test';
 import { loader as adminAllCategoriesLoader } from './pages/admin/AllCategories';
 import { action as deleteCategoryAction } from './pages/admin/DeleteCategory';
 import { loader as editCategoryLoader } from './pages/admin/EditCategory';
+import { loader as loginLoader } from './pages/Login';
+import { loader as registerLoader } from './pages/Register';
 
 import {
   AdminAddPost,
@@ -79,11 +81,13 @@ const router = createBrowserRouter([
     path: '/register',
     element: <Register />,
     action: registerAction,
+    loader: registerLoader,
   },
   {
     path: '/login',
     element: <Login />,
     action: loginAction(queryClient),
+    loader: loginLoader,
   },
   {
     path: '/admin',

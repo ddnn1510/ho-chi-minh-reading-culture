@@ -52,7 +52,7 @@ export const useHomeLayoutContext = () => {
 const HomeLayout = () => {
   const { categoriesList, currentUserData } = useLoaderData();
   const location = useLocation();
-  const [categoryName, setCategoryName] = useState('');
+  const [categoryName, setCategoryName] = useState(null);
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isPageLoading = navigation.state === 'loading';
@@ -63,8 +63,9 @@ const HomeLayout = () => {
   const logout = async () => {
     await customFetch.get('/auth/logout');
     await queryClient.setQueryData(['current-user'], null);
-
     navigate('/');
+    //reload window
+    window.location.reload();
   };
 
   return (
@@ -72,7 +73,7 @@ const HomeLayout = () => {
       value={{ categoriesList, currentUserData, setCategoryName, logout }}
     >
       <Wrapper>
-        <TopNav />
+        <TopNav key={currentUserData?.id} />
         {!isTestPage && (
           <>
             <HeroBanner />
