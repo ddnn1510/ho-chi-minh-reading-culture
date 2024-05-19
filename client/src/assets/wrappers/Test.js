@@ -42,6 +42,16 @@ const Wrapper = styled.div`
       display: none;
     }
 
+    .list-score {
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      gap: 5px;
+      .score {
+        color: var(--green-600);
+      }
+    }
+
     .countdown-test {
       width: 100px;
       padding: 3px 15px;
@@ -86,6 +96,10 @@ const Wrapper = styled.div`
           }
         }
 
+        .current {
+          border: 2px solid var(--yellow-400);
+        }
+
         .answered {
           background-color: var(--yellow-100);
 
@@ -94,8 +108,20 @@ const Wrapper = styled.div`
           }
         }
 
-        .current {
-          border: 2px solid var(--yellow-400);
+        .correct {
+          background-color: var(--green-50);
+
+          .question-text {
+            color: var(--green-600);
+          }
+        }
+
+        .wrong {
+          background-color: var(--primary-50);
+
+          .question-text {
+            color: var(--primary-600);
+          }
         }
       }
     }
@@ -195,6 +221,48 @@ const Wrapper = styled.div`
       .answer-item input:checked ~ .checkmark:after {
         opacity: 1;
       }
+
+      .answer-item.disabled {
+        cursor: default;
+      }
+
+      .answer-item.disabled:hover input ~ .checkmark {
+        border-color: #c4cfdd;
+      }
+
+      .answer-item.correct {
+        color: var(--green-600);
+
+        .checkmark,
+        input:checked ~ .checkmark {
+          border-color: var(--green-500);
+        }
+
+        .checkmark:after {
+          background: var(--green-500);
+        }
+      }
+
+      .answer-item.correct.disabled:hover input ~ .checkmark {
+        border-color: var(--green-500);
+      }
+
+      .answer-item.wrong {
+        color: var(--primary-600);
+
+        .checkmark,
+        input:checked ~ .checkmark {
+          border-color: var(--primary-400);
+        }
+
+        .checkmark:after {
+          background: var(--primary-400);
+        }
+      }
+
+      .answer-item.wrong.disabled:hover input ~ .checkmark {
+        border-color: var(--primary-400);
+      }
     }
   }
 
@@ -213,6 +281,32 @@ const Wrapper = styled.div`
       display: flex;
       align-items: center;
       gap: 5px;
+    }
+  }
+
+  .modal {
+    .modal-content {
+      .container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        font-size: 20px;
+        font-weight: 500;
+
+        .score {
+          font-size: 28px;
+
+          span {
+            color: var(--green-500);
+          }
+        }
+
+        .btn {
+          padding: 0.375rem 2rem;
+          margin: 0 auto;
+        }
+      }
     }
   }
 

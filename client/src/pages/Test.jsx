@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa6';
 import customFetch from '../utils/customFetch';
 import { toast } from 'react-toastify';
-import { redirect, useLoaderData } from 'react-router-dom';
+import { Link, redirect, useLoaderData, useNavigate } from 'react-router-dom';
+import CustomModal from '../components/CustomModal';
+import Cookies from 'js-cookie';
 
 const testQuery = {
   queryKey: ['test'],
@@ -25,12 +27,10 @@ export const loader = (queryClient) => async () => {
   try {
     await queryClient.prefetchQuery(currentUserQuery);
 
-    // Now you can get the current user data
-    const user = queryClient.getQueryData(['current-user']);
+    // Retrieve the current user data
+    const data = queryClient.getQueryData(['current-user']);
 
-    console.log(user);
-
-    if (!user) {
+    if (!data || !data.user) {
       return redirect('/login');
     }
 
@@ -42,21 +42,45 @@ export const loader = (queryClient) => async () => {
 
 const Test = () => {
   const test = useLoaderData();
-
-  const questions = test?.questions.map((item, index) => ({ ...item, index }));
+  const navigate = useNavigate();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [questions, setQuestions] = useState(
+    test?.questions.map((item, index) => ({ ...item, index }))
+  );
   const [currentQuestion, setCurrentQuestion] = useState(questions[0]);
+  const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState(
     questions.map((item) => ({ question_id: item._id, answer: null }))
   );
   const [timeLeft, setTimeLeft] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const getCurrentTimestamp = () => {
-    //cover startTime to timestamp
-    return Date.parse(test?.startTime);
+  const toggleModal = (state) => {
+    setIsModalOpen(state);
+  };
+
+  const verifyTestCookie = () => {
+    const testCookie = Cookies.get('test');
+    if (!testCookie) {
+      return navigate('/contest');
+    }
+
+    const test = JSON.parse(testCookie);
+    if (!test.start) {
+      return navigate('/contest');
+    }
+
+    const currentTime = Date.now();
+    const startTime = Date.parse(test.startTime);
+    if (currentTime - startTime > 30 * 60 * 1000) {
+      return navigate('/contest');
+    }
   };
 
   useEffect(() => {
-    const startTime = getCurrentTimestamp() / 1000;
+    verifyTestCookie();
+
+    const startTime = Date.parse(test?.startTime) / 1000;
 
     setTimeLeft(startTime + 30 * 60 - Date.now() / 1000);
 
@@ -74,13 +98,34 @@ const Test = () => {
   }, []);
 
   const getQuestionStatus = (index) => {
-    if (answers[index]?.answer !== null) {
-      return 'answered';
-    } else if (currentQuestion.index === index) {
-      return 'current';
-    } else {
-      return '';
+    let status = '';
+
+    if (currentQuestion.index === index) {
+      status += ' current';
     }
+    if (isSubmitted) {
+      if (questions[index]?.isCorrect) {
+        status += ' correct';
+      } else {
+        status += ' wrong';
+      }
+    } else if (answers[index]?.answer !== null) {
+      status += ' answered';
+    }
+    return status;
+  };
+
+  const getAnswerStatus = (questionIndex, userAnswerIndex) => {
+    let status = '';
+    if (isSubmitted) {
+      status += 'disabled';
+      if (userAnswerIndex === questions[questionIndex]?.correct) {
+        status += ' correct';
+      } else if (userAnswerIndex === questions[questionIndex]?.userAnswer) {
+        status += ' wrong';
+      }
+    }
+    return status;
   };
 
   const handleNext = () => {
@@ -102,12 +147,20 @@ const Test = () => {
   };
 
   const handleSubmit = async () => {
-    console.log('submit', answers);
     try {
       const body = { testId: test?.testId, answers };
-      await customFetch.post('/tests/submit', body);
+      const result = await customFetch.post('/tests/submit', body);
       toast.success('Bạn đã nộp bài thành công');
-      // return redirect('/login');
+      setIsSubmitted(true);
+      Cookies.remove('test');
+      if (result?.data) {
+        setScore(result?.data?.score || 0);
+        setQuestions(
+          result?.data?.questions.map((item, index) => ({ ...item, index })) ||
+            []
+        );
+      }
+      toggleModal(true);
     } catch (error) {
       toast.error(error?.response?.data?.msg);
 
@@ -123,15 +176,22 @@ const Test = () => {
             <div className="list-title not-mobile font-bold">
               Danh sách câu hỏi
             </div>
-            {/* <div className="list-title mobile font-bold">Thời gian còn lại</div> */}
-            <div
-              className={`countdown-test ${
-                timeLeft <= 5 * 60 ? 'red' : 'yellow'
-              }`}
-            >
-              {Math.floor(timeLeft / 60)}:
-              {('0' + Math.floor(timeLeft % 60)).slice(-2)}
-            </div>
+            {!isSubmitted ? (
+              <div
+                className={`countdown-test ${
+                  timeLeft <= 5 * 60 ? 'red' : 'yellow'
+                }`}
+              >
+                {Math.floor(timeLeft / 60)}:
+                {('0' + Math.floor(timeLeft % 60)).slice(-2)}
+              </div>
+            ) : (
+              <div className="list-score">
+                <span className="score">{score}</span>
+                <span>/</span>
+                <span>30</span>
+              </div>
+            )}
           </div>
           <hr />
           <div className="question-list flex flex-wrap justify-center">
@@ -164,12 +224,19 @@ const Test = () => {
             <div className="title-note font-semibold">Chọn đáp án đúng:</div>
             <div className="answer-group flex flex-col">
               {currentQuestion.answers.map((answer, index) => (
-                <label className="answer-item" key={index}>
+                <label
+                  className={`answer-item ${getAnswerStatus(
+                    currentQuestion.index,
+                    index
+                  )}`}
+                  key={index}
+                >
                   <input
                     type="radio"
                     value={index}
                     checked={answers[currentQuestion.index]?.answer === index}
                     onChange={() => handleAnswer(currentQuestion._id, index)}
+                    disabled={isSubmitted}
                   />
                   <span className="answer-text">{answer}</span>
                   <span className="checkmark"></span>
@@ -189,13 +256,35 @@ const Test = () => {
                 <FaAngleRight />
               </button>
             </div>
-            <button className="btn btn-submit btn-white" onClick={handleSubmit}>
-              <FaCheck />
-              Nộp bài
-            </button>
+            {!isSubmitted ? (
+              <button
+                className="btn btn-submit btn-white"
+                onClick={handleSubmit}
+              >
+                <FaCheck />
+                Nộp bài
+              </button>
+            ) : (
+              <Link to="/contest">
+                <button className="btn btn-white">Về trang thi</button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
+      {/* <button onClick={() => toggleModal(true)}>open</button> */}
+      <CustomModal isOpen={isModalOpen} onClose={() => toggleModal(false)}>
+        <div className="container">
+          <div>Chúc mừng bạn đã hoàn thành bài thi với số điểm</div>
+          <div className="score">
+            <span>{score}</span>/30
+          </div>
+          <hr />
+          <button className="btn" onClick={() => toggleModal(false)}>
+            Xem đáp án chi tiết
+          </button>
+        </div>
+      </CustomModal>
     </Wrapper>
   );
 };

@@ -12,10 +12,11 @@ export const action =
     const data = Object.fromEntries(formData);
     try {
       await customFetch.post('/auth/login', data);
-      queryClient.refetchQueries({
-        queryKey: ['current-user'],
-      });
-      toast.success('Login successful');
+      const currentUser = await customFetch.get('/users/current-user');
+
+      await queryClient.setQueryData(['current-user'], currentUser.data);
+
+      toast.success('Đăng nhập thành công!');
       return redirect('/');
     } catch (error) {
       toast.error(error?.response?.data?.msg);

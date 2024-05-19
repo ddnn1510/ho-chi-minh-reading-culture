@@ -3,11 +3,9 @@ import { FaCaretDown, FaTimes } from 'react-icons/fa';
 import Wrapper from '../assets/wrappers/ModalNav';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
-import { useHomeLayoutContext } from '../pages/HomeLayout';
 
-const ModalNav = ({ categoriesList, showNavbar, toggleNavbar }) => {
+const ModalNav = ({ user, categoriesList, showNavbar, toggleNavbar }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
@@ -16,8 +14,6 @@ const ModalNav = ({ categoriesList, showNavbar, toggleNavbar }) => {
     toggleNavbar();
     setShowDropdown(false);
   };
-
-  const { currentUserData } = useHomeLayoutContext();
 
   return (
     <Wrapper>
@@ -59,9 +55,11 @@ const ModalNav = ({ categoriesList, showNavbar, toggleNavbar }) => {
             <NavLink to="/contest" className="nav-link" onClick={toggleClose}>
               Thi trực tuyến
             </NavLink>
-            <NavLink to="/login" className="nav-link" onClick={toggleClose}>
-              Đăng nhập
-            </NavLink>
+            {!user?.name && (
+              <NavLink to="/login" className="nav-link" onClick={toggleClose}>
+                Đăng nhập
+              </NavLink>
+            )}
           </div>
         </div>
       </div>

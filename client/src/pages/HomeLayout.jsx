@@ -3,6 +3,7 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
+  useNavigate,
   useNavigation,
 } from 'react-router-dom';
 import { Footer, GoTop, TopNav, HeroBanner } from '../components';
@@ -10,6 +11,7 @@ import Wrapper from '../assets/wrappers/HomeLayout';
 import { createContext, useContext, useState } from 'react';
 import customFetch from '../utils/customFetch';
 import Loading from '../components/Loading';
+import { useQueryClient } from '@tanstack/react-query';
 
 const categoriesQuery = {
   queryKey: ['categories'],
@@ -50,22 +52,34 @@ export const useHomeLayoutContext = () => {
 const HomeLayout = () => {
   const { categoriesList, currentUserData } = useLoaderData();
   const location = useLocation();
-  const [categoryName, setCategoryName] = useState();
+  const [categoryName, setCategoryName] = useState('');
   const navigation = useNavigation();
+  const navigate = useNavigate();
   const isPageLoading = navigation.state === 'loading';
+  const queryClient = useQueryClient();
 
   const isTestPage = location.pathname === '/test';
 
+  const logout = async () => {
+    await customFetch.get('/auth/logout');
+    await queryClient.setQueryData(['current-user'], null);
+
+    navigate('/');
+  };
+
   return (
     <HomeLayoutContext.Provider
-      value={{ categoriesList, currentUserData, setCategoryName }}
+      value={{ categoriesList, currentUserData, setCategoryName, logout }}
     >
       <Wrapper>
-        <TopNav categoriesList={categoriesList} />
+        <TopNav />
         {!isTestPage && (
           <>
             <HeroBanner />
-            <div className="category-name">{categoryName || 'Giới thiệu'}</div>
+            <div className="category-name">
+              {categoryName ||
+                'Chào mừng các bạn đến với "Không gian văn hoá đọc Hồ Chí Minh"'}
+            </div>
           </>
         )}
         <main>{isPageLoading ? <Loading /> : <Outlet />}</main>

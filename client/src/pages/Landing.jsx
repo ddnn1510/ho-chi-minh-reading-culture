@@ -58,7 +58,7 @@ const Landing = () => {
       <section className="category-list-section">
         <h4 className="text-center font-bold">Danh mục bài viết</h4>
         <div className="category-list">
-          {categoriesList.map((category, index) => (
+          {categoriesList?.map((category, index) => (
             <div className="category-item" key={index}>
               <img className="category-img" src={category.intro_image} />
               <div className="category-content">
