@@ -25,8 +25,13 @@ const Wrapper = styled.div`
       font-size: 20px;
     }
 
-    img {
+    img,
+    .ql-video {
       width: 100%;
+    }
+
+    .ql-video {
+      aspect-ratio: 16 / 9;
     }
   }
 
@@ -75,7 +80,8 @@ const Wrapper = styled.div`
         font-size: 16px;
       }
 
-      img {
+      img,
+      .ql-video {
         width: 100%;
       }
     }
