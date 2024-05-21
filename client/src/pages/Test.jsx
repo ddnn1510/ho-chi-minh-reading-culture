@@ -25,7 +25,7 @@ const currentUserQuery = {
   },
 };
 
-const DURATION = 0 * 60 + 30;
+const DURATION = 30 * 60;
 
 const verifyTestCookie = () => {
   const testCookie = Cookies.get('test');
