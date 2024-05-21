@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 
   .category-name {
     width: 100%;
-    padding: 16px 24px;
+    padding: 24px;
     font-size: 26px;
     background-color: var(--primary-900);
     color: var(--white);
@@ -35,11 +35,15 @@ const Wrapper = styled.div`
     }
   }
 
+  @media screen and (max-width: 1200px) {
+    .category-name {
+      font-size: 22px;
+    }
+  }
+
   @media screen and (max-width: 1024px) {
     .category-name {
-      padding: 16px 16px;
-      font-size: 22px;
-      line-height: 28px;
+      padding: 16px 20px;
     }
 
     main {
@@ -47,15 +51,8 @@ const Wrapper = styled.div`
     }
   }
 
-  @media screen and (max-width: 992px) {
-    .category-name {
-      padding: 12px 16px;
-    }
-  }
-
   @media screen and (max-width: 768px) {
     .category-name {
-      padding: 8px 16px;
       font-size: 18px;
     }
 
@@ -68,7 +65,6 @@ const Wrapper = styled.div`
 
   @media screen and (max-width: 481px) {
     .category-name {
-      padding: 8px 16px;
       font-size: 16px;
     }
   }

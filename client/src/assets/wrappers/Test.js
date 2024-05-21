@@ -399,6 +399,14 @@ const Wrapper = styled.div`
       }
     }
   }
+
+  @media screen and (max-width: 1024px) {
+    .test-view__right {
+      .action-container {
+        gap: 1rem;
+      }
+    }
+  }
 `;
 
 export default Wrapper;

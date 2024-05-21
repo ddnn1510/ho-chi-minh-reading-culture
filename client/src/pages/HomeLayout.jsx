@@ -12,6 +12,7 @@ import { createContext, useContext, useState } from 'react';
 import customFetch from '../utils/customFetch';
 import Loading from '../components/Loading';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 const categoriesQuery = {
   queryKey: ['categories'],
@@ -63,6 +64,7 @@ const HomeLayout = () => {
   const logout = async () => {
     await customFetch.get('/auth/logout');
     await queryClient.setQueryData(['current-user'], null);
+    toast.success('Đăng xuất thành công!');
     navigate('/');
     //reload window
     window.location.reload();

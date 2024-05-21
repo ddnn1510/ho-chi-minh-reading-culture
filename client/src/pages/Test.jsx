@@ -1,11 +1,13 @@
 import Wrapper from '../assets/wrappers/Test';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight, FaCheck } from 'react-icons/fa6';
 import customFetch from '../utils/customFetch';
 import { toast } from 'react-toastify';
-import { Link, redirect, useLoaderData, useNavigate } from 'react-router-dom';
+import { Link, redirect, useLoaderData } from 'react-router-dom';
 import CustomModal from '../components/CustomModal';
 import Cookies from 'js-cookie';
+import { ArrowContainer, Popover } from 'react-tiny-popover';
+import { RiErrorWarningFill } from 'react-icons/ri';
 
 const testQuery = {
   queryKey: ['test'],
@@ -23,6 +25,28 @@ const currentUserQuery = {
   },
 };
 
+const DURATION = 0 * 60 + 30;
+
+const verifyTestCookie = () => {
+  const testCookie = Cookies.get('test');
+  if (!testCookie) {
+    return false;
+  }
+
+  const test = JSON.parse(testCookie);
+  if (!test.start) {
+    return false;
+  }
+
+  const currentTime = Date.now();
+  const startTime = Date.parse(test.startTime);
+  if (currentTime - startTime > DURATION * 1000) {
+    return false;
+  }
+
+  return true;
+};
+
 export const loader = (queryClient) => async () => {
   try {
     await queryClient.prefetchQuery(currentUserQuery);
@@ -35,7 +59,11 @@ export const loader = (queryClient) => async () => {
       return redirect('/login');
     }
 
-    return await queryClient.ensureQueryData(testQuery);
+    if (!verifyTestCookie()) {
+      return redirect('/contest');
+    } else {
+      return await queryClient.ensureQueryData(testQuery);
+    }
   } catch (error) {
     return redirect('/');
   }
@@ -43,7 +71,6 @@ export const loader = (queryClient) => async () => {
 
 const Test = () => {
   const test = useLoaderData();
-  const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [questions, setQuestions] = useState(
     test?.questions.map((item, index) => ({ ...item, index }))
@@ -54,49 +81,40 @@ const Test = () => {
     questions.map((item) => ({ question_id: item._id, answer: null }))
   );
   const [timeLeft, setTimeLeft] = useState();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const toggleModal = (state) => {
-    setIsModalOpen(state);
+  useEffect(() => {
+    const startTime = Date.parse(test?.startTime) / 1000;
+    setTimeLeft(Math.floor(startTime + DURATION - Date.now() / 1000));
+  }, [test]);
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+      2,
+      '0'
+    )}`;
   };
 
-  const verifyTestCookie = () => {
-    const testCookie = Cookies.get('test');
-    if (!testCookie) {
-      return navigate('/contest');
-    }
-
-    const test = JSON.parse(testCookie);
-    if (!test.start) {
-      return navigate('/contest');
-    }
-
-    const currentTime = Date.now();
-    const startTime = Date.parse(test.startTime);
-    if (currentTime - startTime > 30 * 60 * 1000) {
-      return navigate('/contest');
-    }
-  };
+  const tick = useCallback(() => {
+    setTimeLeft((prevTime) => {
+      if (prevTime > 0) return prevTime - 1;
+      return prevTime;
+    });
+  }, []);
 
   useEffect(() => {
-    verifyTestCookie();
-
-    const startTime = Date.parse(test?.startTime) / 1000;
-
-    setTimeLeft(startTime + 30 * 60 - Date.now() / 1000);
-
-    const timer = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => {
-        if (prevTimeLeft <= 1) {
-          clearInterval(timer);
-          handleSubmit();
-        }
-        return prevTimeLeft - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+    if (!isSubmitted) {
+      if (timeLeft > 0) {
+        const timerId = setInterval(tick, 1000);
+        return () => clearInterval(timerId);
+      } else if (timeLeft === 0) {
+        handleSubmit();
+      }
+    }
+  }, [isSubmitted, timeLeft, tick]);
 
   const getQuestionStatus = (index) => {
     let status = '';
@@ -149,10 +167,14 @@ const Test = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsSubmitted(true);
+
+      const completionTime = formatTime(DURATION - timeLeft);
+      // console.log(completionTime);
+
       const body = { testId: test?.testId, answers };
       const result = await customFetch.post('/tests/submit', body);
       toast.success('Bạn đã nộp bài thành công');
-      setIsSubmitted(true);
       Cookies.remove('test');
       if (result?.data) {
         setScore(result?.data?.score || 0);
@@ -161,7 +183,7 @@ const Test = () => {
             []
         );
       }
-      toggleModal(true);
+      setIsModalOpen(true);
     } catch (error) {
       toast.error(error?.response?.data?.msg);
 
@@ -180,11 +202,10 @@ const Test = () => {
             {!isSubmitted ? (
               <div
                 className={`countdown-test ${
-                  timeLeft <= 5 * 60 ? 'red' : 'yellow'
+                  timeLeft <= DURATION / 6 ? 'red' : 'yellow'
                 }`}
               >
-                {Math.floor(timeLeft / 60)}:
-                {('0' + Math.floor(timeLeft % 60)).slice(-2)}
+                {formatTime(timeLeft)}
               </div>
             ) : (
               <div className="list-score">
@@ -258,13 +279,52 @@ const Test = () => {
               </button>
             </div>
             {!isSubmitted ? (
-              <button
-                className="btn btn-submit btn-white"
-                onClick={handleSubmit}
+              <Popover
+                isOpen={isPopoverOpen}
+                positions={['top', 'bottom', 'left', 'right']}
+                containerClassName="popover-container"
+                content={({ position, childRect, popoverRect }) => (
+                  <ArrowContainer
+                    position={position}
+                    childRect={childRect}
+                    popoverRect={popoverRect}
+                    arrowColor={'var(--white)'}
+                    arrowSize={10}
+                    arrowStyle={{ opacity: 0.7 }}
+                    className="popover-arrow-container"
+                    arrowClassName="popover-arrow"
+                  >
+                    <div className="popover-content">
+                      <div className="text-container flex items-center justify-center">
+                        <RiErrorWarningFill />
+                        <span>Bạn chắc chắn muốn nộp bài?</span>
+                      </div>
+                      <div className="btn-container flex items-center justify-center">
+                        <button
+                          className="btn btn-cancel"
+                          onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                        >
+                          Huỷ thao tác
+                        </button>
+                        <button
+                          className="btn btn-submit"
+                          onClick={handleSubmit}
+                        >
+                          Tiếp tục
+                        </button>
+                      </div>
+                    </div>
+                  </ArrowContainer>
+                )}
               >
-                <FaCheck />
-                Nộp bài
-              </button>
+                <button
+                  className="btn btn-submit btn-white"
+                  onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                >
+                  <FaCheck />
+                  Nộp bài
+                </button>
+              </Popover>
             ) : (
               <Link to="/contest">
                 <button className="btn btn-white">Về trang thi</button>
@@ -273,15 +333,14 @@ const Test = () => {
           </div>
         </div>
       </div>
-      {/* <button onClick={() => toggleModal(true)}>open</button> */}
-      <CustomModal isOpen={isModalOpen} onClose={() => toggleModal(false)}>
+      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="container">
           <div>Chúc mừng bạn đã hoàn thành bài thi với số điểm</div>
           <div className="score">
             <span>{score}</span>/30
           </div>
           <hr />
-          <button className="btn" onClick={() => toggleModal(false)}>
+          <button className="btn" onClick={() => setIsModalOpen(false)}>
             Xem đáp án chi tiết
           </button>
         </div>

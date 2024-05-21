@@ -9,6 +9,7 @@ const FormRow = ({
   defaultValue,
   onChange,
   required = true,
+  isRegister = false,
   placeholder = '',
 }) => {
   const [currentType, setCurrentType] = useState('password');
@@ -40,6 +41,7 @@ const FormRow = ({
             defaultValue={defaultValue || ''}
             placeholder={placeholder}
             required
+            autoComplete={isRegister ? 'new-password' : 'current-password'}
             onChange={onChange}
           />
           <div className="form-icon" onClick={togglePassword}>
@@ -55,6 +57,7 @@ const FormRow = ({
           defaultValue={defaultValue || ''}
           placeholder={placeholder}
           required
+          autoComplete={name}
           onChange={onChange}
         />
       )}

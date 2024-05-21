@@ -52,7 +52,12 @@ const Register = () => {
           </p>
           <FormRow type="text" name="name" labelText="Họ và tên" />
           <FormRow type="email" name="email" labelText="Email" />
-          <FormRow type="password" name="password" labelText="Mật khẩu" />
+          <FormRow
+            type="password"
+            name="password"
+            labelText="Mật khẩu"
+            isRegister={true}
+          />
           <button type="submit" className="btn btn-block">
             Đăng ký
           </button>

@@ -546,3 +546,42 @@ button:disabled {
 .items-stretch {
   align-items: stretch;
 }
+
+/* popover */
+.popover-container {
+  z-index: 10;
+}
+
+.popover-content {
+  padding: 20px;
+  background-color: var(--white);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+
+  .text-container {
+    margin-bottom: 1rem;
+    gap: 5px;
+    font-size: 14px;
+
+    svg {
+      color: var(--primary-500);
+    }
+  }
+
+  .btn-container {
+    gap: 10px;
+
+    .btn {
+      height: max-content;
+      font-size: 12px;
+      padding: 7px 15px;
+      border-radius: var(--border-radius);
+    }
+
+    .btn-cancel {
+      background-color: var(--red-light);
+      color: var(--red-dark);
+      border-color: var(--red-light);
+    }
+  }
+}
