@@ -4,6 +4,7 @@ const Wrapper = styled.div`
   min-height: calc(100vh);
   display: flex;
   flex-direction: column;
+  align-items: center;
   color: var(--text-color);
 
   main {
@@ -13,11 +14,14 @@ const Wrapper = styled.div`
     margin: 60px auto 70px;
     padding: 0 40px;
     font-size: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .category-name {
-    height: 71px;
-    padding: 16px 24px;
+    width: 100%;
+    padding: 24px;
     font-size: 26px;
     background-color: var(--primary-900);
     color: var(--white);
@@ -31,12 +35,15 @@ const Wrapper = styled.div`
     }
   }
 
+  @media screen and (max-width: 1200px) {
+    .category-name {
+      font-size: 22px;
+    }
+  }
+
   @media screen and (max-width: 1024px) {
     .category-name {
-      height: 60px;
-      padding: 16px 16px;
-      font-size: 22px;
-      line-height: 28px;
+      padding: 16px 20px;
     }
 
     main {
@@ -44,17 +51,8 @@ const Wrapper = styled.div`
     }
   }
 
-  @media screen and (max-width: 992px) {
-    .category-name {
-      height: 52px;
-      padding: 12px 16px;
-    }
-  }
-
   @media screen and (max-width: 768px) {
     .category-name {
-      height: 44px;
-      padding: 8px 16px;
       font-size: 18px;
     }
 
@@ -67,7 +65,6 @@ const Wrapper = styled.div`
 
   @media screen and (max-width: 481px) {
     .category-name {
-      padding: 8px 16px;
       font-size: 16px;
     }
   }

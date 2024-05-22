@@ -17,7 +17,7 @@ const Wrapper = styled.aside`
     visibility: hidden;
   }
   .show-sidebar {
-    z-index: 99;
+    z-index: 10;
     opacity: 1;
     visibility: visible;
   }

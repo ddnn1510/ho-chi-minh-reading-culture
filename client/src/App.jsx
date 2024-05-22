@@ -8,6 +8,7 @@ import {
   Contest,
   Category,
   Post,
+  Test,
 } from './pages';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -18,12 +19,23 @@ import { loader as allPostsLoader } from './pages/admin/AllPosts';
 import { loader as addPostLoader } from './pages/admin/AddPost';
 import { action as deletePostAction } from './pages/admin/DeletePost';
 import { postLoader, categoryLoader } from './pages/admin/EditPost';
+import { loader as HomeLayoutLoader } from './pages/HomeLayout';
+import { loader as categoryDetailLoader } from './pages/Category';
+import { loader as testLoader } from './pages/Test';
+import { loader as adminAllCategoriesLoader } from './pages/admin/AllCategories';
+import { action as deleteCategoryAction } from './pages/admin/DeleteCategory';
+import { loader as editCategoryLoader } from './pages/admin/EditCategory';
+import { loader as loginLoader } from './pages/Login';
+import { loader as registerLoader } from './pages/Register';
 
 import {
   AdminAddPost,
   AdminLayout,
   AdminAllPosts,
   AdminEditPost,
+  AdminAllCategories,
+  AdminAddCategory,
+  AdminEditCategory,
 } from './pages/admin';
 
 const queryClient = new QueryClient({
@@ -56,17 +68,24 @@ const router = createBrowserRouter([
         path: 'contest',
         element: <Contest />,
       },
+      {
+        path: 'test',
+        element: <Test />,
+        loader: testLoader(queryClient),
+      },
     ],
   },
   {
     path: '/register',
     element: <Register />,
     action: registerAction,
+    loader: registerLoader,
   },
   {
     path: '/login',
     element: <Login />,
     action: loginAction(queryClient),
+    loader: loginLoader,
   },
   {
     path: '/admin',
@@ -95,6 +114,24 @@ const router = createBrowserRouter([
         },
       },
       { path: 'delete-post/:id', action: deletePostAction(queryClient) },
+      {
+        path: 'categories',
+        element: <AdminAllCategories />,
+        loader: adminAllCategoriesLoader(queryClient),
+      },
+      {
+        path: 'add-category',
+        element: <AdminAddCategory />,
+      },
+      {
+        path: 'edit-category/:categoryId',
+        element: <AdminEditCategory />,
+        loader: editCategoryLoader(queryClient),
+      },
+      {
+        path: 'delete-category/:id',
+        action: deleteCategoryAction(queryClient),
+      },
     ],
   },
 ]);

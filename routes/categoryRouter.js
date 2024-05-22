@@ -4,6 +4,7 @@ import {
   createCategory,
   deleteCategory,
   getCategories,
+  getCategoriesFilter,
   getCategoriesInfo,
   getCategoryById,
   updateCategory,
@@ -12,6 +13,7 @@ import { authenticateUser } from '../middleware/authMiddleware.js';
 
 //router get catgories info
 router.route('/intro').get(getCategoriesInfo);
+router.route('/filter').get(getCategoriesFilter);
 
 router
   .route('/')

@@ -1,12 +1,12 @@
+/* eslint-disable react/prop-types */
 import { FaCaretDown, FaTimes } from 'react-icons/fa';
 import Wrapper from '../assets/wrappers/ModalNav';
 import { NavLink } from 'react-router-dom';
 import { categoryLinks } from '../utils/links';
 import { useState } from 'react';
 
-const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
+const ModalNav = ({ user, categoriesList, showNavbar, toggleNavbar }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
@@ -38,7 +38,7 @@ const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
                 <FaCaretDown />
               </button>
               <div className="dropdown-content">
-                {categoryList.map((item) => {
+                {categoriesList?.map((item) => {
                   const { _id, name } = item;
                   return (
                     <NavLink
@@ -56,9 +56,11 @@ const ModalNav = ({ categoryList, showNavbar, toggleNavbar }) => {
             <NavLink to="/contest" className="nav-link" onClick={toggleClose}>
               Thi trực tuyến
             </NavLink>
-            <NavLink to="/login" className="nav-link" onClick={toggleClose}>
-              Đăng nhập
-            </NavLink>
+            {!user?.name && (
+              <NavLink to="/login" className="nav-link" onClick={toggleClose}>
+                Đăng nhập
+              </NavLink>
+            )}
           </div>
         </div>
       </div>

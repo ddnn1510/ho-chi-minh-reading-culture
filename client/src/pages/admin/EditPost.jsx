@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   Form,
   useLoaderData,
@@ -38,13 +39,13 @@ const EditPost = () => {
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isSubmitting = navigation.state === 'submitting';
-  const [editorContent, setEditorContent] = useState('');
 
   const { postId } = useParams();
   const { post, categories } = useLoaderData(
     postLoader(postId, navigate),
     categoryLoader(navigate)
   );
+  const [editorContent, setEditorContent] = useState(post.data.content);
 
   const queryClient = useQueryClient();
 

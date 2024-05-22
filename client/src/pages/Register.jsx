@@ -1,9 +1,27 @@
-import { Form, Link, redirect } from 'react-router-dom';
+import { Form, Link, json, redirect } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage';
 import { FormRow } from '../components';
 import customFetch from '../utils/customFetch';
 import portraictImg from '../assets/images/portrait-bac-ho.png';
 import { toast } from 'react-toastify';
+
+const fetchCurrentUser = async () => {
+  const { data } = await customFetch.get('/users/current-user');
+  return data;
+};
+
+export const loader = async () => {
+  try {
+    const data = await fetchCurrentUser();
+    if (data.user !== null) {
+      return redirect('/');
+    }
+    return json({});
+  } catch (error) {
+    toast.error(error?.response?.data?.msg);
+    return redirect('/');
+  }
+};
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -34,7 +52,12 @@ const Register = () => {
           </p>
           <FormRow type="text" name="name" labelText="Họ và tên" />
           <FormRow type="email" name="email" labelText="Email" />
-          <FormRow type="password" name="password" labelText="Mật khẩu" />
+          <FormRow
+            type="password"
+            name="password"
+            labelText="Mật khẩu"
+            isRegister={true}
+          />
           <button type="submit" className="btn btn-block">
             Đăng ký
           </button>

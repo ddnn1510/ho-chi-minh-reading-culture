@@ -3,15 +3,16 @@ import styled from 'styled-components';
 const Wrapper = styled.nav`
   width: 100%;
   padding: 0 1.5rem;
+  background-color: var(--primary-600);
 
   .topnav {
-    margin: 10px auto 0;
+    margin: 10px auto;
+    padding: 10px 1.5rem;
     max-width: 1280px;
     background-color: var(--primary-900);
-    overflow: hidden;
     border-radius: var(--border-radius-rounded);
     display: flex;
-    padding: 10px 1.5rem;
+    align-items: center;
   }
 
   .logo {
@@ -32,6 +33,7 @@ const Wrapper = styled.nav`
 
   .topnav-content.desktop {
     display: flex;
+    align-items: center;
   }
 
   .topnav-content.mobile {
@@ -88,7 +90,7 @@ const Wrapper = styled.nav`
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 10;
   }
 
   .topnav-content .dropdown-content a {
@@ -157,14 +159,22 @@ const Wrapper = styled.nav`
       height: 35px;
     }
     .topnav-content .toggle-btn {
-      margin-left: 10px;
-      font-size: 20px;
-      height: max-content;
+      padding: 8px;
+      width: 41px;
+      height: 41px;
       background-color: transparent;
       color: var(--white);
       border: none;
       outline: none;
       cursor: pointer;
+
+      svg {
+        width: 25px;
+        height: 25px;
+      }
+    }
+    .topnav-content .toggle-btn:hover {
+      background-color: rgba(0, 0, 0, 0.2);
     }
   }
 
