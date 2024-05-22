@@ -15,6 +15,7 @@ import questionRouter from './routes/questionRouter.js';
 import testRouter from './routes/testRouter.js';
 
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import { authenticateUser } from './middleware/authMiddleware.js';
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -28,7 +29,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/categories', categoryRouter);
 app.use('/api/v1/questions', questionRouter);

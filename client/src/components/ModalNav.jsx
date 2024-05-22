@@ -2,6 +2,7 @@
 import { FaCaretDown, FaTimes } from 'react-icons/fa';
 import Wrapper from '../assets/wrappers/ModalNav';
 import { NavLink } from 'react-router-dom';
+import { categoryLinks } from '../utils/links';
 import { useState } from 'react';
 
 const ModalNav = ({ user, categoriesList, showNavbar, toggleNavbar }) => {

@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-
 /* eslint-disable react/prop-types */
 const FormRow = ({
   type,
@@ -12,19 +9,6 @@ const FormRow = ({
   isRegister = false,
   placeholder = '',
 }) => {
-  const [currentType, setCurrentType] = useState('password');
-  const [icon, setIcon] = useState(<FaEyeSlash />);
-
-  const togglePassword = () => {
-    if (currentType === 'password') {
-      setIcon(<FaEye />);
-      setCurrentType('text');
-    } else {
-      setIcon(<FaEyeSlash />);
-      setCurrentType('password');
-    }
-  };
-
   return (
     <div className="form-row">
       <label htmlFor="name" className="form-label">

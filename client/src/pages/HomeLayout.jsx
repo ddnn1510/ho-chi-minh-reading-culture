@@ -9,46 +9,21 @@ import {
 import { Footer, GoTop, TopNav, HeroBanner } from '../components';
 import Wrapper from '../assets/wrappers/HomeLayout';
 import { createContext, useContext, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import customFetch from '../utils/customFetch';
 import Loading from '../components/Loading';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-const categoriesQuery = {
-  queryKey: ['categories'],
-  queryFn: async () => {
-    const { data } = await customFetch.get('/categories/intro');
-    return data;
-  },
+const fetchCategories = async () => {
+  const { data } = await customFetch.get('/categories/intro');
+  return data;
 };
 
-const currentUserQuery = {
-  queryKey: ['current-user'],
-  queryFn: async () => {
-    const { data } = await customFetch.get('/users/current-user');
-    return data;
-  },
-};
+export const CategoriesContext = createContext();
 
-export const loader = (queryClient) => async () => {
-  let categoriesList = null;
-  let currentUserData = null;
-
-  try {
-    categoriesList = await queryClient.ensureQueryData(categoriesQuery);
-    currentUserData = await queryClient.ensureQueryData(currentUserQuery);
-  } catch (error) {
-    if (error.response && error.response.status === 401) {
-      queryClient.setQueryData('current-user', null);
-    }
-  }
-  return { categoriesList, currentUserData };
-};
-
-export const HomeLayoutContext = createContext();
-
-export const useHomeLayoutContext = () => {
-  return useContext(HomeLayoutContext);
+export const useCategories = () => {
+  return useContext(CategoriesContext);
 };
 const HomeLayout = () => {
   const { categoriesList, currentUserData } = useLoaderData();
@@ -87,9 +62,8 @@ const HomeLayout = () => {
         )}
         <main>{isPageLoading ? <Loading /> : <Outlet />}</main>
         <Footer />
-        <GoTop />
       </Wrapper>
-    </HomeLayoutContext.Provider>
+    </CategoriesContext.Provider>
   );
 };
 export default HomeLayout;

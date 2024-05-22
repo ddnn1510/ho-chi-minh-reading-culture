@@ -51,7 +51,6 @@ const router = createBrowserRouter([
     path: '/',
     element: <HomeLayout />,
     errorElement: <Error />,
-    loader: HomeLayoutLoader(queryClient),
     children: [
       {
         index: true,
@@ -60,7 +59,6 @@ const router = createBrowserRouter([
       {
         path: 'category/:categoryId',
         element: <Category />,
-        loader: categoryDetailLoader(queryClient),
       },
       {
         path: 'post/:postId',

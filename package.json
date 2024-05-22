@@ -7,7 +7,7 @@
   "author": "ddnn1510 <nndd.1510@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "setup-project": "yarn && cd client && yarn",
+    "setup-project": "npm i && cd client && npm i",
     "dev": "nodemon server.js",
     "watch": "node --watch server.js ",
     "server": "nodemon server",
@@ -31,7 +31,6 @@
     "jsonwebtoken": "9.0.0",
     "mongoose": "7.0.5",
     "morgan": "1.10.0",
-    "nodemon": "2.0.22",
-    "qrcode": "^1.5.3"
+    "nodemon": "2.0.22"
   }
 }

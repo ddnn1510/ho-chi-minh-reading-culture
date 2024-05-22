@@ -1,6 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
+import { useOutletContext } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/LandingPage';
-import { useHomeLayoutContext } from './HomeLayout';
+import { useCategories } from './HomeLayout';
+import { useEffect } from 'react';
 
 const Landing = () => {
   const homeLayoutContext = useHomeLayoutContext();
@@ -69,7 +71,7 @@ const Landing = () => {
               <img className="category-img" src={category.intro_image} />
               <div className="category-content">
                 <div className="category-title">
-                  {index + 1}. {category.name}
+                  {index + 1}: {category.name}
                 </div>
                 <div className="category-description">{category.intro}</div>
               </div>
