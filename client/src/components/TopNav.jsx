@@ -4,14 +4,9 @@ import logoSchool from '../assets/images/logo-school.svg';
 import { FaBars, FaCaretDown } from 'react-icons/fa';
 import { useState } from 'react';
 import ModalNav from './ModalNav';
-import { useHomeLayoutContext } from '../pages/HomeLayout';
-import LogoutContainer from './LogoutContainer';
 
-const TopNav = () => {
-  const { categoriesList, currentUserData } = useHomeLayoutContext();
-
+const TopNav = ({ categoryList }) => {
   const [showNavbar, setShowNavbar] = useState(false);
-
   const toggleNavbar = () => {
     setShowNavbar(!showNavbar);
   };
@@ -37,7 +32,7 @@ const TopNav = () => {
               <FaCaretDown />
             </button>
             <div className="dropdown-content">
-              {categoriesList?.map((item) => {
+              {categoryList.map((item) => {
                 const { _id, name } = item;
                 return (
                   <NavLink
@@ -53,24 +48,16 @@ const TopNav = () => {
             </div>
           </div>
           <NavLink to="/contest">Thi trực tuyến</NavLink>
-          {!currentUserData?.user?.name ? (
-            <NavLink to="/login">
-              Đăng nhập {currentUserData?.user?.name}
-            </NavLink>
-          ) : (
-            <LogoutContainer />
-          )}
+          <NavLink to="/login">Đăng nhập</NavLink>
         </div>
         <div className="topnav-content mobile">
-          {currentUserData?.user?.name && <LogoutContainer />}
           <button type="button" className="toggle-btn" onClick={toggleNavbar}>
             <FaBars />
           </button>
         </div>
       </div>
       <ModalNav
-        user={currentUserData?.user || {}}
-        categoriesList={categoriesList}
+        categoryList={categoryList}
         showNavbar={showNavbar}
         toggleNavbar={toggleNavbar}
       />

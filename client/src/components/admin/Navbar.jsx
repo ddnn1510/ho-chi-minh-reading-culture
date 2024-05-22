@@ -1,7 +1,7 @@
 import Wrapper from '../../assets/wrappers/admin/Navbar';
 import { FaAlignLeft } from 'react-icons/fa';
 import { useAdminContext } from '../../pages/admin/AdminLayout';
-import { LogoutContainer } from '../admin';
+import LogoutContainer from '../LogoutContainer';
 
 const Navbar = () => {
   const { toggleSidebar } = useAdminContext();

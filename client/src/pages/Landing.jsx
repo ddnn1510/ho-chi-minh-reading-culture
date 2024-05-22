@@ -5,13 +5,21 @@ import { useCategories } from './HomeLayout';
 import { useEffect } from 'react';
 
 const Landing = () => {
-  const homeLayoutContext = useHomeLayoutContext();
+  const { data: categoryList, isLoading, isError } = useCategories();
 
-  if (!homeLayoutContext) {
-    // Handle the case where homeLayoutContext is undefined
-    return null; // Or return a loading spinner, or throw an error, etc.
+  const { setCategoryName } = useOutletContext();
+
+  useEffect(() => {
+    setCategoryName('Giới thiệu');
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-  const { categoriesList } = homeLayoutContext;
+
+  if (isError) {
+    return <div>Error loading categories</div>;
+  }
 
   return (
     <Wrapper>
@@ -66,7 +74,7 @@ const Landing = () => {
       <section className="category-list-section">
         <h4 className="text-center font-bold">Danh mục bài viết</h4>
         <div className="category-list">
-          {categoriesList?.map((category, index) => (
+          {categoryList.map((category, index) => (
             <div className="category-item" key={index}>
               <img className="category-img" src={category.intro_image} />
               <div className="category-content">

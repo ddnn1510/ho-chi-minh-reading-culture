@@ -1,10 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Post';
 import { Sidebar } from '../components';
 import { useQuery } from '@tanstack/react-query';
 import customFetch from '../utils/customFetch';
 import { useEffect } from 'react';
-import { useHomeLayoutContext } from './HomeLayout';
 
 const fetchPostById = async (id) => {
   const { data } = await customFetch.get(`/posts/${id}`);
@@ -23,7 +22,7 @@ const Post = () => {
     queryFn: () => fetchPostById(postId),
   });
 
-  const { setCategoryName } = useHomeLayoutContext();
+  const { setCategoryName } = useOutletContext();
 
   useEffect(() => {
     setCategoryName(post?.category?.name || '');

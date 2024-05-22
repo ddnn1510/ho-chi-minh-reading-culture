@@ -1,11 +1,14 @@
-import { redirect, useLoaderData } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Post';
 import { Sidebar } from '../components';
 import { useQuery } from '@tanstack/react-query';
 import customFetch from '../utils/customFetch';
 import { useEffect } from 'react';
-import { useHomeLayoutContext } from './HomeLayout';
-import { toast } from 'react-toastify';
+
+const fetchCategoryById = async (id) => {
+  const { data } = await customFetch.get(`/categories/${id}`);
+  return data;
+};
 
 const Category = () => {
   const { categoryId } = useParams();

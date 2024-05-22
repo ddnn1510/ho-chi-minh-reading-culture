@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { MdQueryStats } from 'react-icons/md';
 import { FaWpforms } from 'react-icons/fa';
 
@@ -10,16 +12,6 @@ const adminLinks = [
   {
     text: 'Quản lý bài viết',
     path: 'posts',
-    icon: <MdQueryStats />,
-  },
-  {
-    text: 'Thêm danh mục',
-    path: 'add-category',
-    icon: <FaWpforms />,
-  },
-  {
-    text: 'Quản lý danh mục',
-    path: 'categories',
     icon: <MdQueryStats />,
   },
 ];
